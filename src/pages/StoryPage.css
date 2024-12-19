@@ -1,0 +1,307 @@
+/* body {
+  font-family: Montserrat;
+  background-color: #dff0d8 ;
+  color: #333;
+} */
+
+.wedding-invitation {
+  text-align: center;
+  font-size: 18px;
+}
+.header-invitation-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #dff0d8 ;
+  margin: 0 auto;
+}
+
+.content-wrapper {
+  /* flex: 1 1 calc(50% - 16px); */
+  height: 100vh;
+  max-width: 50%;
+  text-align: center;
+  justify-items: center;
+  align-content: center;
+}
+
+.content-wrapper-main {
+  height: 100vh;
+  flex-grow: 1;
+  /* flex: 1 1 calc(50% - 16px); */
+  text-align: center;
+  justify-items: center;
+  align-content: center;
+}
+
+.header-wrapper {
+  padding: 16px;
+  text-align: center;
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: flex;
+}
+
+.header {
+  background-color: #dff0d8;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 15px;
+  height: max-content;
+  text-transform: uppercase;
+  align-items: center;
+  gap: 8px;
+}
+
+.header h1 {
+  color: #005500;
+}
+
+.invitation-content {
+  margin-top: 20px;
+}
+
+.invitation-content h3 {
+  font-size: 20px;
+  margin: 5px;
+}
+
+.invitation-content p {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.guest-contact {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.details {
+  background-color: #e8fbe8;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.footer-note {
+  margin-top: 20px 0;
+  background-color: #fff;
+  padding: 20px;
+  /* border-radius: 10px; */
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer-note p {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.footer-note span {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.scrollable-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  padding: 20px;
+  height: 300px;
+  align-items: center;
+  justify-content: normal;
+}
+
+.scrollable-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in Chrome, Edge, and Safari */
+}
+
+@media (max-width: 768px) {
+  .scrollable-container {
+    justify-content: flex-start;
+  }
+}
+
+.scrollable-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.card {
+  min-width: 300px;
+  max-width: 300px;
+  height: 200px;
+  /* background: linear-gradient(145deg, #fff, #f0f0f0); */
+  font-family: "Fuzzy Bubbles", cursive;
+  border: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  transform: rotate(-5deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card span {
+  padding-top: 10px;
+  text-align: center;
+}
+
+.card:hover {
+  transform: rotate(0deg) scale(1.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.card p {
+  margin: 10px 0 0;
+  color: #666;
+}
+
+.footer {
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  align-items: center;
+  padding: 10px 20px;
+}
+.logo-wrapper {
+  display: flex;
+  position:absolute;
+  justify-content: space-between;
+}
+
+.add-to-calendar-wrapper {
+  text-align: right;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+}
+
+.footer-logo {
+  width: 100px;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.add-to-calendar {
+  text-decoration: none;
+  color: #337ab7;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-to-calendar:hover {
+  text-decoration: underline;
+}
+
+.powered-by {
+  color: #333;
+  font-size: 14px;
+}
+
+.powered-by strong {
+  color: #ff6f61;
+}
+.divider {
+  background-color: #000000;
+  height: 100px;
+  width: 1px;
+  margin: 5px 20px;
+}
+.wed-time {
+  text-transform: lowercase;
+}
+.header-left {
+  text-align: end;
+}
+.wish-conatiner {
+  display: flex;
+  justify-content: center;
+}
+
+.button-wishes {
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #494959;
+  color: #fff;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.button-wishes span {
+  padding-left: 3px;
+}
+
+.col-center {
+  color: #576642;
+  display: inline-flex;
+  text-align: center;
+  justify-items: center;
+  align-content: center;
+  font-size: 20px;
+}
+
+.bottom-divider {
+  width: 1px;
+  margin: 0 20px;
+  display: flex;
+  background-color: #000;
+  opacity: 0.4;
+  align-items: center;
+  
+}
+
+.hr {
+  height: 2px;
+  border-width: 0;
+  color: gray;
+  background-color: gray;
+  width: 80%;
+  margin: 32px 0;
+}
+.calendar-container {
+  display: flex;
+  justify-content: center;
+}
+.calendar-date {
+  width: 62px;
+  height: 62px;
+  background-size: cover;
+}
+.calendar-day {
+  padding-top: 20px;
+}
