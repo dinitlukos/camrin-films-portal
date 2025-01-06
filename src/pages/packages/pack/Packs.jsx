@@ -1,19 +1,26 @@
 import Grid from "@mui/material/Grid2";
 import { doc, getDoc } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../../../firebase";
 import Loader from "../../Loader";
 
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import ClientDetails from "./ClientDetails";
 import PackageType from "./PackageType";
 import ServiceFailure from "./ServiceFailure";
 import Terms from "./Terms";
-
+import { useReactToPrint } from "react-to-print";
 
 const Packs = () => {
   const [loading, setLoading] = React.useState(0);
+  const contentRef = useRef(null);
+
+  const handlePrint = useReactToPrint({
+    contentRef: contentRef,
+    copyShadowRoots: true,
+    ignoreGlobalStyles: false,
+  });
 
   const [data, setData] = useState();
 
@@ -134,45 +141,53 @@ const Packs = () => {
   }
 
   return (
-    <div>
-      {data ? (
-        <Grid container direction="column" spacing={2}>
-          <ClientDetails data={data} />
-          <Grid container spacing={4}>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <PackageType pack={packages?.classic} title="Classic Package" />
+    <>
+      <div ref={contentRef}>
+        {data ? (
+          <Grid container direction="column" spacing={2}>
+            <ClientDetails data={data} />
+            <Grid container spacing={4}>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <PackageType pack={packages?.classic} title="Classic Package" />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <PackageType
+                  pack={packages?.premium}
+                  variant="premium"
+                  title="Premium Package"
+                />
+              </Grid>
             </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <PackageType
-                pack={packages?.premium}
-                variant="premium"
-                title="Premium Package"
-              />
-            </Grid>
+            <Terms />
+            <ServiceFailure />
           </Grid>
-          <Terms />
-          <ServiceFailure />
-        </Grid>
-      ) : (
-        <Grid
-          container
-          alignItems="center"
-          justifyContent="center"
-          direction="column"
-          style={{
-            background: "linear-gradient(180deg, #841042 0%, #CD3339 100%)",
-            height: "300px",
-            borderRadius: 25,
-            color: "#fff",
-          }}
-        >
-          <Typography>
-            Thanks for the patience! We are working on your package.
-          </Typography>
-          <Typography>We will get back to you soon...</Typography>
-        </Grid>
-      )}
-    </div>
+        ) : (
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="center"
+            direction="column"
+            style={{
+              background: "linear-gradient(180deg, #841042 0%, #CD3339 100%)",
+              height: "300px",
+              borderRadius: 25,
+              color: "#fff",
+            }}
+          >
+            <Typography>
+              Thanks for the patience! We are working on your package.
+            </Typography>
+            <Typography>We will get back to you soon...</Typography>
+          </Grid>
+        )}
+      </div>
+      <Button
+        onClick={handlePrint}
+        style={{ marginTop: "20px", color: "#000", outline: "1px solid black" }}
+      >
+        Print
+      </Button>
+    </>
   );
 };
 
