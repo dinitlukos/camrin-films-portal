@@ -37,7 +37,7 @@ const Locations = () => {
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_APIS_CREDS}>
       <Grid container direction="row" spacing={4}>
         {loc.map((v, k) => (
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid key={k} size={{ xs: 12, md: 4 }}>
             <Card
               style={{
                 boxShadow:

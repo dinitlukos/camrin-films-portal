@@ -38,8 +38,6 @@ const Deliverables = ({ deliverables = [], color }) => {
             <Typography>{v?.title}</Typography>
           </Grid>
           <Grid
-            alignContent="center"
-            justifyContent="center"
             container
             direction="column"
             size={{ xs: 12, md: 8 }}
@@ -51,8 +49,8 @@ const Deliverables = ({ deliverables = [], color }) => {
           >
             <List>
               {(v?.items ?? []).map((cv, ck) => (
-                <ListItem key={ck} style={{ height: "40px" }}>
-                  <ListItemIcon>
+                <ListItem key={ck} style={{ minHeight: "40px" }}>
+                  <ListItemIcon >
                     <StarIcon />
                   </ListItemIcon>
                   <ListItemText>{cv}</ListItemText>

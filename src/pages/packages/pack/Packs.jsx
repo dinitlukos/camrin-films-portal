@@ -5,12 +5,13 @@ import { useParams } from "react-router-dom";
 import { db } from "../../../firebase";
 import Loader from "../../Loader";
 
-import { Button, Typography } from "@mui/material";
+import { DownloadOutlined } from "@mui/icons-material";
+import { IconButton, Typography } from "@mui/material";
+import { useReactToPrint } from "react-to-print";
 import ClientDetails from "./ClientDetails";
 import PackageType from "./PackageType";
 import ServiceFailure from "./ServiceFailure";
 import Terms from "./Terms";
-import { useReactToPrint } from "react-to-print";
 
 const Packs = () => {
   const [loading, setLoading] = React.useState(0);
@@ -28,15 +29,16 @@ const Packs = () => {
     classic: {
       description:
         "A budget friendly package design to capture the key highs of your special day",
-      offer: "Complementory Pre/Post wedding",
+      offer: "Complementory Pre wedding",
       price: "200000",
       deliverables: [
         {
           title: "Photograph & Soft Copies",
-          items: ["All unprocessed primary soft copies", "Edited 100 images"],
+          items: ["All unprocessed primary soft copies", "Edited 50 images"],
         },
         {
           title: "Album",
+          items: ['Two magazine albums including 100 pages (50 Leafs 12"x15")'],
         },
       ],
       events: [
@@ -71,6 +73,7 @@ const Packs = () => {
       description:
         "A budget friendly package design to capture the key highs of your special day",
       price: "500000",
+      offer: "Complementory Pre + Post wedding",
       deliverables: [
         {
           title: "Photograph & Soft Copies",
@@ -78,6 +81,9 @@ const Packs = () => {
         },
         {
           title: "Album",
+          items: [
+            'Two magazine albums including 200 pages (100 Leafs 12"x15")',
+          ],
         },
       ],
       events: [
@@ -181,12 +187,18 @@ const Packs = () => {
           </Grid>
         )}
       </div>
-      <Button
+      <IconButton
+        aria-label="delete"
+        style={{
+          position: "absolute",
+          right: 20,
+          top: 20,
+          color: "#000",
+        }}
         onClick={handlePrint}
-        style={{ marginTop: "20px", color: "#000", outline: "1px solid black" }}
       >
-        Print
-      </Button>
+        <DownloadOutlined />
+      </IconButton>
     </>
   );
 };

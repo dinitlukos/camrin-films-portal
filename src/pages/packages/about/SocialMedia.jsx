@@ -3,7 +3,7 @@ import { FacebookEmbed, InstagramEmbed,PinterestEmbed } from 'react-social-media
 const SocialMedia = () => {
     return (<Grid container direction="row" spacing={2}>
         {/* <Grid size={{xs:12, md:4}}> */}
-        <FacebookEmbed url="https://www.facebook.com/camrinfilms/posts/pfbid0yWSxdF5dceNjMkZZgz4tt1Y2J74QKcn24QPkvHGxySgyd2dCg1a57CPF5sRS1YXal" width={325}/>
+        {/* <FacebookEmbed url="https://www.facebook.com/camrinfilms/posts/pfbid0yWSxdF5dceNjMkZZgz4tt1Y2J74QKcn24QPkvHGxySgyd2dCg1a57CPF5sRS1YXal" width={325}/> */}
 
         {/* </Grid> */}
         {/* <Grid size={{xs:12, md:4}}> */}
