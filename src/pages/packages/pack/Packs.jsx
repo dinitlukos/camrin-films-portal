@@ -13,12 +13,11 @@ import PackageType from "./PackageType";
 import ServiceFailure from "./ServiceFailure";
 import Terms from "./Terms";
 
-const Packs = () => {
+const Packs = ({printRef}) => {
   const [loading, setLoading] = React.useState(0);
-  const contentRef = useRef(null);
 
   const handlePrint = useReactToPrint({
-    contentRef: contentRef,
+    contentRef: printRef,
     copyShadowRoots: true,
     ignoreGlobalStyles: false,
   });
@@ -148,7 +147,7 @@ const Packs = () => {
 
   return (
     <>
-      <div ref={contentRef}>
+      <div>
         {data ? (
           <Grid container direction="column" spacing={2}>
             <ClientDetails data={data} />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Grid from "@mui/material/Grid2";
 import homeBg from "../../assets/packages/bg.jpg";
 import circle from "../../assets/packages/cf_circle.png";
@@ -25,6 +25,7 @@ const theme = createTheme({
 
 const PackagePage = () => {
   const [value, setValue] = React.useState(0);
+  const printRef = useRef(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -39,6 +40,7 @@ const PackagePage = () => {
           padding: "5%",
           minHeight: "100vh",
         }}
+        ref={printRef}
       >
         <Grid
           container
@@ -52,14 +54,14 @@ const PackagePage = () => {
               <img src={circle} alt="Camrin Films Logo" className="spin-img" />
             </div>
           </div>
-          <CustomTabs value={value} handleChange={handleChange}/>
+          <CustomTabs value={value} handleChange={handleChange} />
         </Grid>
         <div style={{ padding: "20px 0" }}>
           <div hidden={value !== 0}>
             <About />
           </div>
           <div hidden={value !== 1}>
-           <Packs/>
+            <Packs printRef={printRef} />
           </div>
           <div hidden={value !== 2}>
             <Gallery />
