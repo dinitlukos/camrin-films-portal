@@ -4,9 +4,11 @@ import PrivateRoute from "./auth/PrivateRoute";
 import AdminHome from "./pages/AdminHome";
 import HomePage from "./pages/HomePage";
 import StoryPage from "./pages/StoryPage";
-import AddClient from "./pages/AddClient";
+import AddClient from "./pages/clients/AddClient";
 import CollectionPage from "./pages/CollectionPage";
 import AdminLogin from "./pages/AdminLogin";
+import ChooseEvent from "./pages/clients/ChooseEvent";
+import PackagePage from "./pages/packages/pack/PackageType";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "/gallery/:storyId",
         element: <CollectionPage />,
+      },
+      {
+        path: "/packages/:storyId",
+        element: <PackagePage />,
       },
       {
         path: "/login",
@@ -42,7 +48,7 @@ const router = createBrowserRouter([
             path: "/admin/client",
             element: (
               <PrivateRoute>
-                <AddClient />
+                <ChooseEvent />
               </PrivateRoute>
             ),
           },

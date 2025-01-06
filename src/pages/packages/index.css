@@ -1,0 +1,67 @@
+.logo {
+  height: 80px;
+}
+.spin-img {
+  position: relative;
+  height: 30px;
+  left:52px;
+  bottom: 78px;
+  animation-name: spin;
+  animation-duration: 5000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; 
+}
+.gradient {
+  background: linear-gradient(180deg, #841042 0%, #CD3339 100%);
+
+}
+.calendar-date {
+  height: 130px;
+  width: 130px;
+  text-align: center;
+  /* : 20px; */
+}
+.calendar-day {
+  padding-top: 40px;
+  font-weight: 900;
+  font-size: 2em;
+  color: #841042;
+}
+.name {
+  padding-top: 12px;
+  font-weight: bold;
+  color: #841042;
+}
+.tri {
+  border-top: 25px solid transparent;
+  border-left: 25px solid white;
+  border-bottom: 25px solid transparent;
+  width:0; 
+  /* background-color:green;  */
+  height:0;
+}
+.offer-text {
+ 
+}
+.blink {
+  animation: blinker 1s linear infinite;
+  padding-left: 40px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  margin-top: -40px;
+  color: #fff;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

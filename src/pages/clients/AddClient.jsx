@@ -17,9 +17,9 @@ import moment from "moment";
 import dayjs, { Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
-import { FormInputText } from "../components/FormInputText";
-import Loader from "./Loader";
-import { db } from "../firebase";
+import { FormInputText } from "../../components/FormInputText";
+import Loader from "../Loader";
+import { db } from "../../firebase";
 import _ from "lodash";
 import {
   Checkbox,
@@ -28,10 +28,10 @@ import {
   FormHelperText,
   Typography,
 } from "@mui/material";
-import ReadMeFie from "../assets/readme.txt";
+import ReadMeFie from "../../assets/readme.txt";
 import Image from "@mui/icons-material/Image";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../auth/AuthProvider";
+import { AuthContext } from "../../auth/AuthProvider";
 
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
@@ -119,6 +119,8 @@ export default function AddressForm() {
     wedding_time: "",
     wedding_location: "",
     wedding_direction: "",
+    classic_price: "",
+    premium_price: "",
   };
 
   const fetchUserData = async () => {
@@ -174,6 +176,8 @@ export default function AddressForm() {
       wedding_time,
       wedding_location,
       wedding_direction,
+      classic_price,
+      premium_price,
     } = data;
     try {
       setLoading(true);
@@ -188,6 +192,17 @@ export default function AddressForm() {
       data["wedding_date"] = eventDate.toDate();
       const docId = doc(db, "stories", uId.toLowerCase());
       const docSnap = await getDoc(docId);
+
+      // const pck = {
+      //   classic: {
+      //     price: classic_price,
+      //   },
+      //   premium: {
+      //     price: premium_price,
+      //   },
+      // };
+      // data["packages"] = pck;
+
       if (coverPhoto) {
         const url = await uploadFile(
           uId.toLowerCase(),
