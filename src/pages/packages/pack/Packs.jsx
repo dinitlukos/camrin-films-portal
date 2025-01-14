@@ -12,8 +12,15 @@ import ClientDetails from "./ClientDetails";
 import PackageType from "./PackageType";
 import ServiceFailure from "./ServiceFailure";
 import Terms from "./Terms";
+import ImportantNotes from "./ImportantNotes";
+import AddOns from "./Addons";
+import Payment from "./Payment";
+import Watermark from "../../../components/Watermark";
+import DateSlider from "./DateSlider";
+import Highlights from "./Highlights";
+import { package_variants } from "../../../constants/packages";
 
-const Packs = ({printRef}) => {
+const Packs = ({ printRef }) => {
   const [loading, setLoading] = React.useState(0);
 
   const handlePrint = useReactToPrint({
@@ -23,100 +30,6 @@ const Packs = ({printRef}) => {
   });
 
   const [data, setData] = useState();
-
-  const packages = {
-    classic: {
-      description:
-        "A budget friendly package design to capture the key highs of your special day",
-      offer: "Complementory Pre wedding",
-      price: "200000",
-      deliverables: [
-        {
-          title: "Photograph & Soft Copies",
-          items: ["All unprocessed primary soft copies", "Edited 50 images"],
-        },
-        {
-          title: "Album",
-          items: ['Two magazine albums including 100 pages (50 Leafs 12"x15")'],
-        },
-      ],
-      events: [
-        {
-          title: "Wedding Eve",
-          services: [
-            "One fuctional photographer",
-            "One fuctional videographer",
-          ],
-        },
-        {
-          title: "Engagement",
-          services: [
-            "One fuctional photographer",
-            "One fuctional videographer",
-            "One candid photographer",
-            "One candid videographer",
-          ],
-        },
-        {
-          title: "Wedding",
-          services: [
-            "One fuctional photographer",
-            "One fuctional videographer",
-            "One candid photographer",
-            "One candid videographer",
-          ],
-        },
-      ],
-    },
-    premium: {
-      description:
-        "A budget friendly package design to capture the key highs of your special day",
-      price: "500000",
-      offer: "Complementory Pre + Post wedding",
-      deliverables: [
-        {
-          title: "Photograph & Soft Copies",
-          items: ["All unprocessed primary soft copies", "Edited 100 images"],
-        },
-        {
-          title: "Album",
-          items: [
-            'Two magazine albums including 200 pages (100 Leafs 12"x15")',
-          ],
-        },
-      ],
-      events: [
-        {
-          title: "Wedding Eve",
-          services: [
-            "One fuctional photographer",
-            "One fuctional videographer",
-            "One candid videographer",
-          ],
-        },
-        {
-          title: "Engagement",
-          services: [
-            "One fuctional photographer",
-            "One fuctional videographer",
-            "One candid photographer",
-            "Two candid videographer",
-            "One cinematic videographer",
-          ],
-        },
-        {
-          title: "Wedding",
-          services: [
-            "One fuctional photographer",
-            "One fuctional videographer",
-            "One candid photographer",
-            "Two candid videographer",
-            "One cinematic videographer",
-          ],
-        },
-      ],
-    },
-  };
 
   const { storyId } = useParams();
 
@@ -145,46 +58,51 @@ const Packs = ({printRef}) => {
     return <Loader />;
   }
 
+  if (!loading && !data) {
+    return (
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="center"
+        direction="column"
+        style={{
+          background: "linear-gradient(180deg, #841042 0%, #CD3339 100%)",
+          height: "300px",
+          borderRadius: 25,
+          color: "#fff",
+        }}
+      >
+        <Typography>
+          Thanks for the patience! We are working on your package.
+        </Typography>
+        <Typography>We will get back to you soon...</Typography>
+      </Grid>
+    );
+  }
+
   return (
     <>
       <div>
-        {data ? (
-          <Grid container direction="column" spacing={2}>
-            <ClientDetails data={data} />
-            <Grid container spacing={4}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <PackageType pack={packages?.classic} title="Classic Package" />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <PackageType
-                  pack={packages?.premium}
-                  variant="premium"
-                  title="Premium Package"
-                />
-              </Grid>
-            </Grid>
-            <Terms />
-            <ServiceFailure />
+        <Grid container direction="column" spacing={2}>
+          {data && <ClientDetails data={data} />}
+          <Highlights />
+          <Grid container spacing={4} direction="row">
+            {package_variants.map((v, k) => {
+              return data?.packages[v] ? (
+                <Grid size={{ xs: 12, md: 6 }} key={k}>
+                  <PackageType pack={data?.packages[v]} events={data?.events} variant={v} />
+                </Grid>
+              ) : (
+                <Grid key={k}/>
+              );
+            })}
           </Grid>
-        ) : (
-          <Grid
-            container
-            alignItems="center"
-            justifyContent="center"
-            direction="column"
-            style={{
-              background: "linear-gradient(180deg, #841042 0%, #CD3339 100%)",
-              height: "300px",
-              borderRadius: 25,
-              color: "#fff",
-            }}
-          >
-            <Typography>
-              Thanks for the patience! We are working on your package.
-            </Typography>
-            <Typography>We will get back to you soon...</Typography>
-          </Grid>
-        )}
+          <Payment />
+          <AddOns />
+          <ImportantNotes />
+          <Terms />
+          <ServiceFailure />
+        </Grid>
       </div>
       <IconButton
         aria-label="delete"

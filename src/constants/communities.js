@@ -1,0 +1,1 @@
+export const communities = ["Christian", "Hindu", "Muslim"]

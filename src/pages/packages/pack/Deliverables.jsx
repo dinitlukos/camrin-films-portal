@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import StarIcon from "@mui/icons-material/Star";
-import { BorderAll, BorderColor } from "@mui/icons-material";
 const Deliverables = ({ deliverables = [], color }) => {
   const theme = useTheme();
   return (
@@ -45,13 +44,14 @@ const Deliverables = ({ deliverables = [], color }) => {
               borderColor: alpha(color, 0.3),
               borderStyle: "solid",
               borderWidth: 1,
+              paddingLeft:5,
             }}
           >
             <List>
               {(v?.items ?? []).map((cv, ck) => (
-                <ListItem key={ck} style={{ minHeight: "40px" }}>
-                  <ListItemIcon >
-                    <StarIcon />
+                <ListItem key={ck}  dense disablePadding disableGutters alignItems='flex-start'>
+                  <ListItemIcon style={{ minWidth: "34px", marginTop:"6px" }} >
+                    <StarIcon fontSize="12" color={alpha(color, 0.3)}/>
                   </ListItemIcon>
                   <ListItemText>{cv}</ListItemText>
                 </ListItem>

@@ -9,11 +9,11 @@ import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Grid from "@mui/material/Grid2";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import _ from "lodash";
 import { styled } from "@mui/material/styles";
 
@@ -30,20 +30,22 @@ import {
   Chip,
   colors,
   IconButton,
+  Link,
   Stack,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { AuthContext } from "../auth/AuthProvider";
 import Loader from "./Loader";
+import { generateUid } from "../shared/StringUtils";
 
 const COL_KEYS = [
   "id",
   "bride_name",
   "groom_name",
   "wedding_date",
-  "guest_contact",
+  "uid",
   "events",
 ];
 
@@ -84,7 +86,8 @@ export default function AdminHome() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { logOut } = React.useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  console.log(location.host);
 
   const fetchStories = async () => {
     const docSnap = await getDocs(collection(db, "stories"));
@@ -142,6 +145,12 @@ export default function AdminHome() {
     setOpen(false);
   };
 
+  const handleNavigation = (uid) => {
+    console.log(location)
+    const url = location.origin + "/packages/" + uid ;
+    window.open(url, "_blank").focus();
+  };
+
   return (
     <div>
       <AppBar position="static">
@@ -183,7 +192,6 @@ export default function AdminHome() {
       <Grid container spacing={3} justifyContent="end">
         <Stack container spacing={3} paddingRight={6} paddingTop={4}>
           <Button variant="outlined" onClick={handleAddClient}>
-            {" "}
             Add Client
           </Button>
         </Stack>
@@ -196,7 +204,7 @@ export default function AdminHome() {
                 <StyledTableCell>Groom Name</StyledTableCell>
                 <StyledTableCell>Bride Name</StyledTableCell>
                 <StyledTableCell>Wedding Date&nbsp;</StyledTableCell>
-                <StyledTableCell>Guest Contact&nbsp;</StyledTableCell>
+                <StyledTableCell>Package Link&nbsp;</StyledTableCell>
                 <StyledTableCell>Events&nbsp;</StyledTableCell>
                 <StyledTableCell>Actions&nbsp;</StyledTableCell>
               </TableRow>
@@ -214,7 +222,12 @@ export default function AdminHome() {
                   <StyledTableCell>
                     {moment(row.wedding_date.toDate()).format("Do MMM yyyy")}
                   </StyledTableCell>
-                  <StyledTableCell>{row.guest_contact}</StyledTableCell>
+                  <StyledTableCell>
+                    <Link
+                      component="button"
+                      onClick={() => handleNavigation(row?.uid)}
+                    >{row?.uid}</Link>
+                  </StyledTableCell>
                   <StyledTableCell>
                     <Grid container spacing={1}>
                       {row.events.map((v, k) => (
@@ -260,12 +273,15 @@ export default function AdminHome() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Please note that once you delete the client, Client no further able to access
-            the invitation and gallary screen, but gallary images will be keep in storage
+            Please note that once you delete the client, Client no further able
+            to access the invitation and gallary screen, but gallary images will
+            be keep in storage
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="info" onClick={handleModelClose}>Cancel</Button>
+          <Button color="info" onClick={handleModelClose}>
+            Cancel
+          </Button>
           <Button color="error" onClick={handleDelete} autoFocus>
             Confirm
           </Button>

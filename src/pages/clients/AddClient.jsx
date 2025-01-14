@@ -1,160 +1,105 @@
-import React, { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid2";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MenuItem from "@mui/material/MenuItem";
+import MenuIcon from "@mui/icons-material/ArrowBack";
+import Image from "@mui/icons-material/Image";
+import { Divider, FormHelperText, Typography } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/ArrowBack";
-import { Box, styled } from "@mui/system";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import { Box } from "@mui/system";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import moment from "moment";
-import dayjs, { Dayjs } from "dayjs";
-import Button from "@mui/material/Button";
-import { useForm } from "react-hook-form";
-import { FormInputText } from "../../components/FormInputText";
-import Loader from "../Loader";
-import { db } from "../../firebase";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs from "dayjs";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import _ from "lodash";
-import {
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  FormHelperText,
-  Typography,
-} from "@mui/material";
-import ReadMeFie from "../../assets/readme.txt";
-import Image from "@mui/icons-material/Image";
+import moment from "moment";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
+import ReadMeFie from "../../assets/readme.txt";
 import { AuthContext } from "../../auth/AuthProvider";
-
-const FormGrid = styled(Grid)(() => ({
-  display: "flex",
-  flexDirection: "column",
-}));
+import FormGrid from "../../components/FormGrid";
+import { FormInputText } from "../../components/FormInputText";
+import { all_events, event_default_values } from "../../constants/events";
+import { db } from "../../firebase";
+import Loader from "../Loader";
+import BrideDetails from "./BrideDetails";
+import ClientEvents from "./ClientEvents";
+import ClientPackages from "./ClientPackages";
+import GroomDetails from "./GroomDetails";
+import ErrorSnackBar from "../../components/ErrorSnackBar";
+import WeddingDetails from "./WeddingDetails";
+import composePaymentTerms from "../../shared/payment";
+import { clone } from "../../shared/StringUtils";
+import { getProperties } from "./ClientService";
+import { package_variants } from "../../constants/packages";
 
 export default function AddressForm() {
   const [eventDate, setEventDate] = useState(dayjs(moment()));
+  const [quotationDate, setQuotationDate] = useState(dayjs(moment()));
+  const [quotationValidity, setQuotationValidity] = useState(
+    dayjs(moment().add(1, "M"))
+  );
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [coverPhoto, setCoverPhoto] = useState("");
+  const [showSnackBar, setShowSnackBar] = useState(false);
+  const [errMessage, setErrMessage] = useState();
+  const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const { logOut } = React.useContext(AuthContext);
-
-  const allEvents = [
-    {
-      name: "Wedding",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Wedding Eve",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Engagement",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Reception",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Save the Date",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Pre Wedding Reception",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Post Wedding",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Haldi",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Mehandi",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Sangeeth",
-      status: false,
-      image: null,
-    },
-    {
-      name: "Dekahina",
-      status: false,
-      image: null,
-    },
-  ];
-  const [events, setEvents] = useState(allEvents);
-  const defaultValues = {
-    groom_name: "",
-    groom_father_name: "",
-    groom_mother_name: "",
-    groom_address: "",
-    bride_name: "",
-    bride_father_name: "",
-    bride_mother_name: "",
-    bride_address: "",
-    guest_contact: "",
-    wedding_time: "",
-    wedding_location: "",
-    wedding_direction: "",
-    classic_price: "",
-    premium_price: "",
-  };
+  const [events, setEvents] = useState(all_events);
+  const [packages, setPackages] = useState([]);
+  const [defaultPackages, setDefaultPackages] = useState([]);
+  const [defaultEvents, setDefaultEvents] = useState([]);
 
   const fetchUserData = async () => {
     try {
+      var data = event_default_values;
+      setLoading(true);
       if (location.state?.id) {
-        setLoading(true);
         const docSnap = await getDoc(doc(db, "stories", location.state?.id));
         if (docSnap.exists()) {
-          const date = docSnap.data()["wedding_date"];
-          setEventDate(dayjs(date.toDate()));
-          const ev = _.map(allEvents, (e) => {
-            var t = { ...e };
+          const d = docSnap.data();
+          setDates(d);
+          const ev = _.map(clone(all_events), (e) => {
             const cp = _.find(docSnap.data()["events"], { name: e.name });
-            if (cp) {
-              if (cp?.cover_photo) t["cover_photo"] = cp?.cover_photo;
-              t.status = true;
-            }
-            return t;
+            return cp ? { ...e, ...cp, status: true } : e;
           });
+          setPackages(d["packages"]);
           setEvents(ev);
-          setLoading(false);
-          return docSnap.data();
+          data = d;
         } else {
-          setLoading(false);
+          //No User found in DB
         }
-      } else {
-        return defaultValues;
       }
+      if (packages.length <= 0) {
+        const defPacks = await getProperties("packages");
+        setPackages(defPacks);
+      }
+      setLoading(false);
+      return data;
     } catch (err) {
       setLoading(false);
     }
   };
 
-  const { register, handleSubmit, reset, control, setValue } = useForm({
+  const setDates = (d) => {
+    const date = d?.wedding_date;
+    const qDate = d?.packages?.quotation?.date;
+    const qVDate = d?.packages?.quotation?.validity;
+    setEventDate(dayjs(date.toDate()));
+    setQuotationDate(dayjs(qDate.toDate()));
+    setQuotationValidity(dayjs(qVDate.toDate()));
+  };
+
+  const { register, handleSubmit, reset, control } = useForm({
     defaultValues: async () => await fetchUserData(),
   });
 
@@ -163,22 +108,7 @@ export default function AddressForm() {
   };
 
   const onSubmit = async (data) => {
-    const {
-      groom_name,
-      groom_father_name,
-      groom_mother_name,
-      groom_address,
-      bride_name,
-      bride_father_name,
-      bride_mother_name,
-      bride_address,
-      guest_contact,
-      wedding_time,
-      wedding_location,
-      wedding_direction,
-      classic_price,
-      premium_price,
-    } = data;
+    const { groom_name, bride_name } = data;
     try {
       setLoading(true);
       const uId =
@@ -187,22 +117,17 @@ export default function AddressForm() {
         bride_name?.replace(/ +/g, "")?.substring(0, 3) +
         "_" +
         eventDate.format("DDMMYY");
-      var ev = await refactorEvents(uId.toLowerCase(), events);
+      const evs = clone(events);
+      var ev = await refactorEvents(uId.toLowerCase(), evs);
+      var pcks = await composePackage(ev, data);
+      delete data?.gold_package_price;
+      delete data?.diamond_package_price;
+      data["uid"] = uId.toLowerCase();
+      data["packages"] = pcks;
       data["events"] = ev;
       data["wedding_date"] = eventDate.toDate();
       const docId = doc(db, "stories", uId.toLowerCase());
       const docSnap = await getDoc(docId);
-
-      // const pck = {
-      //   classic: {
-      //     price: classic_price,
-      //   },
-      //   premium: {
-      //     price: premium_price,
-      //   },
-      // };
-      // data["packages"] = pck;
-
       if (coverPhoto) {
         const url = await uploadFile(
           uId.toLowerCase(),
@@ -214,7 +139,7 @@ export default function AddressForm() {
       if (docSnap.exists()) {
         await updateDoc(docId, data);
         const existingEvents = docSnap.data()?.events;
-        ev = _.difference(ev, existingEvents);
+        // ev = _.difference(ev, existingEvents);
       } else {
         await setDoc(docId, data);
       }
@@ -225,6 +150,8 @@ export default function AddressForm() {
     } catch (err) {
       console.log(err);
       setLoading(false);
+      // setErrMessage(err);
+      // setShowSnackBar(true);
     }
   };
 
@@ -254,6 +181,24 @@ export default function AddressForm() {
     return e;
   };
 
+  const handlePackageInputChange = (p, k, v) => {
+    packages[p][k] = v;
+    setPackages({ ...packages });
+  };
+
+  const composePackage = async (ev, d) => {
+    var pck = clone(packages);
+    const evKeys = _.map(ev, (o) => o.id);
+    package_variants.forEach((v, i) => {
+      pck[v]["payment_terms"] = composePaymentTerms(v, evKeys);
+    });
+    pck["quotation"] = {
+      date: quotationDate.toDate(),
+      validity: quotationValidity.toDate(),
+    };
+    return pck;
+  };
+
   const createStorage = async (uId, selectedEvents) => {
     const storage = getStorage();
     for (let i = 0; i < selectedEvents?.length; i++) {
@@ -263,25 +208,6 @@ export default function AddressForm() {
         uId + "/" + el?.replace(/ +/g, "_").toLowerCase() + "/" + "readme.txt"
       );
       await uploadBytes(storageRef, ReadMeFie);
-    }
-  };
-
-  const handleEventStatus = (i) => {
-    {
-      var o = events;
-      if (o[i].status) o[i].image = null;
-      o[i].status = !o[i].status;
-      setEvents(o);
-      setRefresh((refresh) => !refresh);
-    }
-  };
-
-  const handleEventImageUpload = (e, i) => {
-    {
-      var o = events;
-      o[i].image = e.target.files[0];
-      setEvents(o);
-      setRefresh((refresh) => !refresh);
     }
   };
 
@@ -296,15 +222,16 @@ export default function AddressForm() {
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleLogout = async () => {
     try {
       setLoading(true);
       const res = await logOut();
-      console.log(res);
       setLoading(false);
     } catch (err) {
-      console.log(err);
       setLoading(false);
+      setErrMessage(err);
+      setShowSnackBar(true);
     }
   };
 
@@ -370,174 +297,33 @@ export default function AddressForm() {
       >
         <React.Fragment>
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={3} marginBottom="12px">
-              <Typography fontWeight="bold">Groom Details</Typography>
-            </Grid>
-            <Grid container spacing={3}>
-              <FormInputText
-                name="groom_name"
-                control={control}
-                label="Groom Name"
-                inputRef={{ ...register("groom_name", { required: true }) }}
-              />
-              <FormInputText
-                name="groom_father_name"
-                control={control}
-                label="Groom Father Name"
-                inputRef={{
-                  ...register("groom_father_name", { required: true }),
-                }}
-              />
-              <FormInputText
-                name="groom_mother_name"
-                control={control}
-                label="Groom Mother Name"
-                inputRef={{
-                  ...register("groom_mother_name", { required: true }),
-                }}
-              />
-              <FormInputText
-                name="groom_address"
-                control={control}
-                label="Groom Address"
-                inputRef={{ ...register("groom_address", { required: true }) }}
-              />
-            </Grid>
-            <Grid container spacing={3} marginBottom="12px">
-              <Divider style={{ width: "100%", marginTop: 24 }} />
-              <Typography fontWeight="bold">Bride Details</Typography>
-            </Grid>
-            <Grid container spacing={3}>
-              <FormInputText
-                name="bride_name"
-                control={control}
-                label="Bride Name"
-                inputRef={{ ...register("bride_name", { required: true }) }}
-              />
-              <FormInputText
-                name="bride_father_name"
-                control={control}
-                label="Bride Father Name"
-                inputRef={{
-                  ...register("bride_father_name", { required: true }),
-                }}
-              />
-              <FormInputText
-                name="bride_mother_name"
-                control={control}
-                label="Bride Mother Name"
-                inputRef={{
-                  ...register("bride_mother_name", { required: true }),
-                }}
-              />
-              <FormInputText
-                name="bride_address"
-                control={control}
-                label="Bride Address"
-                inputRef={{ ...register("bride_address", { required: true }) }}
-              />
-            </Grid>
-            <Grid container spacing={3} marginBottom="12px">
-              <Divider style={{ width: "100%", marginTop: 24 }} />
-              <Typography fontWeight="bold">Wedding Details</Typography>
-            </Grid>
-            <Grid container spacing={3}>
-              <FormInputText
-                name="guest_contact"
-                control={control}
-                label="Guest Contact Number"
-                message="Invalid Phone Number"
-                inputRef={{
-                  ...register("guest_contact", {
-                    required: true,
-                    pattern: `^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$`,
-                  }),
-                }}
-              />
-              <FormInputText
-                name="wedding_location"
-                control={control}
-                label="Wedding Location"
-                placeholder="Auditorium or Church/Temple name"
-                inputRef={{
-                  ...register("wedding_location", { required: true }),
-                }}
-              />
-              {/* <FormInputDate
-              label="Wedding Date"
+            <GroomDetails control={control} register={register} />
+            <Divider
+              style={{ width: "100%", marginTop: 24, marginBottom: 24 }}
+            />
+            <BrideDetails control={control} register={register} />
+            <Divider
+              style={{ width: "100%", marginTop: 24, marginBottom: 24 }}
+            />
+
+            <WeddingDetails
               control={control}
-              name="wedding_date"
-              // inputRef={{
-              //   ...register("wedding_date", {
-              //     required: true,
-              //   }),
-              // }}
-            /> */}
-              <FormGrid size={{ xs: 12, md: 6 }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    disablePast
-                    label="Wedding Date"
-                    value={eventDate}
-                    onChange={(e) => setEventDate(e)}
-                  />
-                </LocalizationProvider>
-              </FormGrid>
+              register={register}
+              eventDate={eventDate}
+              setEventDate={setEventDate}
+            />
+            <Divider
+              style={{ width: "100%", marginTop: 24, marginBottom: 24 }}
+            />
 
-              <FormInputText
-                name="wedding_time"
-                control={control}
-                label="Wedding Time"
-                size="medium"
-                placeholder="11:05 am to 11.45 am / 10.00 am"
-                inputRef={{ ...register("wedding_time", { required: true }) }}
+            <Grid container spacing={3}>
+              <ClientEvents
+                events={events}
+                pcks={packages}
+                defPacks={defaultPackages}
+                setEvents={setEvents}
+                setRefresh={setRefresh}
               />
-
-              <Divider style={{ width: "100%" }} />
-              <Typography fontWeight="bold">Events</Typography>
-              <Grid
-                container
-                style={{ width: "100%", marginBottom: "12px" }}
-                direction="column"
-              >
-                {events.map((v, i) => (
-                  <Grid key={i} container direction="row">
-                    <Grid>
-                      <FormControlLabel
-                        label={v.name}
-                        control={
-                          <Checkbox
-                            checked={v.status}
-                            onChange={() => handleEventStatus(i)}
-                          />
-                        }
-                      />
-                    </Grid>
-                    <Grid>
-                      {v.status && (
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          component="label"
-                        >
-                          Upload Cover Image
-                          <input
-                            type="file"
-                            hidden
-                            onChange={(e) => handleEventImageUpload(e, i)}
-                            accept=".png, .jpg, .jpeg"
-                          />
-                        </Button>
-                      )}
-                    </Grid>
-                    <Grid>
-                      <FormHelperText style={{ color: "green" }}>
-                        {v?.image?.name}
-                      </FormHelperText>
-                    </Grid>
-                  </Grid>
-                ))}
-              </Grid>
             </Grid>
             <Divider style={{ width: "100%" }} />
             <Typography fontWeight="bold" style={{ margin: "24px 0" }}>
@@ -581,7 +367,18 @@ export default function AddressForm() {
               </FormGrid>
               <FormGrid size={{ xs: 12, md: 6 }}></FormGrid>
             </Grid>
-            <Divider style={{ width: "100%", marginBottom: "24px" }} />
+            <Divider style={{ width: "100%" }} />
+            <ClientPackages
+              control={control}
+              packages={packages}
+              onPackageChange={handlePackageInputChange}
+              register={register}
+              defPacks={defaultPackages}
+              quotationDate={quotationDate}
+              setQuotationDate={setQuotationDate}
+              quotationValidity={quotationValidity}
+              setQuotationValidity={setQuotationValidity}
+            />
             <Grid
               container
               spacing={12}
@@ -607,6 +404,11 @@ export default function AddressForm() {
           {loading && <Loader />}
         </React.Fragment>
       </Box>
+      <ErrorSnackBar
+        message={errMessage}
+        open={showSnackBar}
+        setOpen={setShowSnackBar}
+      />
     </div>
   );
 }

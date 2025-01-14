@@ -18,19 +18,19 @@ const Locations = () => {
       direction: { lat: 10.0889055, lng: 76.3391836 },
       place: "Cochin",
       address:
-        "Metro Pillar No, Camrin Films, 106, Companypadi, Choornikkara, Aluva, Kerala 683106, India",
+        "Metro Pillar No 106, Companypadi, Choornikkara, Aluva, Kerala 683106, India",
     },
     {
-      direction: { lat: 10.0889055, lng: 76.3391836 },
-      place: "Banglore",
+      direction: { lat: 24.4571007, lng: 54.3721664 },
+      place: "UAE",
       address:
-        "Metro Pillar No, Camrin Films, 106, Companypadi, Choornikkara, Aluva, Kerala 683106, India",
+        "Camrin Films, Building 02, 2 Yalyam Street, Al Nahyan, W15 01 - Abu Dhabi - UAE",
     },
     {
-      direction: { lat: 10.0889055, lng: 76.3391836 },
+      direction: { lat: 47.73855, lng: 11.5749774 },
       place: "Ireland",
       address:
-        "Metro Pillar No, Camrin Films, 106, Companypadi, Choornikkara, Aluva, Kerala 683106, India",
+        "Camrin Films, 46 The Park Brooms Court Charleville co. Cork, Ireland, P56 TX60",
     },
   ];
   return (

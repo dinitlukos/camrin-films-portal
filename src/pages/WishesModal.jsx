@@ -19,7 +19,7 @@ const WishesModal = ({ ...props }) => {
             {/* <button className="video-record-btn">
                 <span role="img" aria-label="video">
                   🎥
-                </span>{" "}
+                </span>
                 Record Video Wish
               </button> */}
 

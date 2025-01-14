@@ -3,12 +3,12 @@ import App from "./App";
 import PrivateRoute from "./auth/PrivateRoute";
 import AdminHome from "./pages/AdminHome";
 import HomePage from "./pages/HomePage";
-import StoryPage from "./pages/StoryPage";
 import AddClient from "./pages/clients/AddClient";
 import CollectionPage from "./pages/CollectionPage";
 import AdminLogin from "./pages/AdminLogin";
 import ChooseEvent from "./pages/clients/ChooseEvent";
 import PackagePage from "./pages/packages/pack/PackageType";
+import StoryPage from "./pages/stories/StoryPage";
 
 const router = createBrowserRouter([
   {

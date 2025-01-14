@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import StoryPage from "./pages/StoryPage";
 import CollectionPage from "./pages/CollectionPage";
 import AddClient from "./pages/clients/AddClient";
 import AdminHome from "./pages/AdminHome";
@@ -10,13 +9,27 @@ import router from "./Routes";
 import PrivateRoute from "./auth/PrivateRoute";
 import AuthProvider from "./auth/AuthProvider";
 import AdminLogin from "./pages/AdminLogin";
-import ChooseEvent from "./pages/clients/ChooseEvent";
 import PackagePage from "./pages/packages/Index";
+import StoryPage from "./pages/stories/StoryPage";
+import { createTheme, ThemeProvider } from "@mui/material";
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#B82B3C",
+      500: "rgba(184, 43, 60, .1)",
+    },
+
+    secondary: {
+      main: "#723A7A",
+    },
+  },
+});
 const App = () => {
   return (
     // <React.StrictMode>
     // <RouterProvider router={router}/>
+    <ThemeProvider theme={theme}>
     <AuthProvider>
       <Router>
         <Routes>
@@ -39,6 +52,7 @@ const App = () => {
         </Routes>
       </Router>
     </AuthProvider>
+    </ThemeProvider>
     // </React.StrictMode>
   );
 };

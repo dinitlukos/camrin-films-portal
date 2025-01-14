@@ -1,19 +1,18 @@
-import React from "react";
 import Grid from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
-import { db } from "../../firebase";
-import { getDoc, doc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import React from "react";
 import img2 from "../../assets/home/roal.jpg";
+import { db } from "../../firebase";
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box"
-import CelebrationIcon from "@mui/icons-material/Celebration";
 import { useNavigate } from "react-router-dom";
 export default function ChooseEvent() {
   const [eventTypes, setEventTypes] = React.useState([]);

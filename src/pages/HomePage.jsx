@@ -80,7 +80,6 @@ const HomePage = () => {
             textAlign="justify"
             fontSize="1rem"
           >
-            {" "}
             As producers of some of the finest wedding photography in India, we
             are there to fulfill a standard, not a time frame. We attend your
             wedding with one mission: To immortalize the most beautiful memories
