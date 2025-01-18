@@ -11,6 +11,15 @@
   animation-iteration-count: infinite;
   animation-timing-function: linear; 
 }
+.highlight-spin-img {
+  height: 60px;
+  /* left:54px; */
+  /* bottom: 79px; */
+  animation-name: spin;
+  animation-duration: 5000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; 
+}
 .gradient {
   background: linear-gradient(180deg, #841042 0%, #CD3339 100%);
 
@@ -32,7 +41,7 @@
   color: #841042;
 }
 .name {
-  padding-top: 12px;
+  /* padding-top: 12px; */
   font-weight: bold;
   color: #841042;
 }
@@ -73,6 +82,10 @@
   animation-delay: calc(.1s * var(--i));
   
 }
+::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes waviy {
   0%,40%,100% {
     transform: translateY(0)

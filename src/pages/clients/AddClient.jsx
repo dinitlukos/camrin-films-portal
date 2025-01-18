@@ -1,7 +1,6 @@
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/ArrowBack";
-import Image from "@mui/icons-material/Image";
-import { Divider, FormHelperText, Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
@@ -10,34 +9,30 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import { Box } from "@mui/system";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import _ from "lodash";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
-import ReadMeFie from "../../assets/readme.txt";
 import { AuthContext } from "../../auth/AuthProvider";
+import ErrorSnackBar from "../../components/ErrorSnackBar";
 import FormGrid from "../../components/FormGrid";
-import { FormInputText } from "../../components/FormInputText";
 import { all_events, event_default_values } from "../../constants/events";
+import { package_variants } from "../../constants/packages";
 import { db } from "../../firebase";
+import composePaymentTerms from "../../shared/payment";
+import { clone, generateUId } from "../../shared/StringUtils";
 import Loader from "../Loader";
 import BrideDetails from "./BrideDetails";
 import ClientEvents from "./ClientEvents";
-import ClientPackages from "./ClientPackages";
+import { createStorage, getProperties, uploadFile } from "./ClientService";
+import DirectionAndCover from "./DirectionAndCover";
 import GroomDetails from "./GroomDetails";
-import ErrorSnackBar from "../../components/ErrorSnackBar";
+import PackageDetails from "./PackageDetails";
 import WeddingDetails from "./WeddingDetails";
-import composePaymentTerms from "../../shared/payment";
-import { clone } from "../../shared/StringUtils";
-import { getProperties } from "./ClientService";
-import { package_variants } from "../../constants/packages";
+import CFAppBar from "../../components/CFAppBar";
 
 export default function AddressForm() {
   const [eventDate, setEventDate] = useState(dayjs(moment()));
@@ -50,42 +45,63 @@ export default function AddressForm() {
   const [coverPhoto, setCoverPhoto] = useState("");
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [errMessage, setErrMessage] = useState();
-  const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { logOut } = React.useContext(AuthContext);
-  const [events, setEvents] = useState(all_events);
+  const [events, setEvents] = useState(clone(all_events["duel"]));
   const [packages, setPackages] = useState([]);
+  const [packageBooked, setPackageBooked] = useState();
   const [defaultPackages, setDefaultPackages] = useState([]);
+  const [packageType, setPackageType] = useState("duel");
   const [defaultEvents, setDefaultEvents] = useState([]);
+
+  const uId = location.state?.id
 
   const fetchUserData = async () => {
     try {
       var data = event_default_values;
+      var pcks = [];
       setLoading(true);
-      if (location.state?.id) {
-        const docSnap = await getDoc(doc(db, "stories", location.state?.id));
+      if (uId) {
+        const docSnap = await getDoc(doc(db, "stories", uId));
         if (docSnap.exists()) {
           const d = docSnap.data();
+          // console.log(d)
           setDates(d);
-          const ev = _.map(clone(all_events), (e) => {
+          const ev = _.map(clone(all_events["duel"]), (e) => {
             const cp = _.find(docSnap.data()["events"], { name: e.name });
             return cp ? { ...e, ...cp, status: true } : e;
           });
-          setPackages(d["packages"]);
+          data = { ...d };
+          pcks = d["packages"];
+          data["package_type"] = d["package_type"] ?? "duel";
+          data["package_suggestions"] =
+            d["package_suggestions"] ?? package_variants;
+          setPackageBooked(d["package_booked"]);
           setEvents(ev);
-          data = d;
         } else {
           //No User found in DB
         }
       }
+
+      // const p = await getProperties("packages");
+      // console.log(JSON.stringify(p))
+
+      // p.forEach(async (e,k) => {
+      //   console.log(e,k)
+      // await updateProperties("packages", p)
+
+      // })
       if (packages.length <= 0) {
         const defPacks = await getProperties("packages");
-        setPackages(defPacks);
+        setDefaultPackages(defPacks);
+        pcks = defPacks["duel"];
       }
+      setPackages(pcks);
       setLoading(false);
       return data;
     } catch (err) {
+      console.log(err);
       setLoading(false);
     }
   };
@@ -94,56 +110,47 @@ export default function AddressForm() {
     const date = d?.wedding_date;
     const qDate = d?.packages?.quotation?.date;
     const qVDate = d?.packages?.quotation?.validity;
-    setEventDate(dayjs(date.toDate()));
-    setQuotationDate(dayjs(qDate.toDate()));
-    setQuotationValidity(dayjs(qVDate.toDate()));
+    if (date) setEventDate(dayjs(date.toDate()));
+    if (qDate) setQuotationDate(dayjs(qDate.toDate()));
+    if (qVDate) setQuotationValidity(dayjs(qVDate.toDate()));
   };
 
-  const { register, handleSubmit, reset, control } = useForm({
+  const { register, handleSubmit, reset, control, getValues } = useForm({
     defaultValues: async () => await fetchUserData(),
   });
 
-  const handleFileUpload = (e) => {
-    setCoverPhoto(e.target.files[0]);
-  };
-
   const onSubmit = async (data) => {
-    const { groom_name, bride_name } = data;
+    const { groom_name, bride_name, customer_email, customer_contact } = data;
     try {
       setLoading(true);
-      const uId =
-        groom_name?.replace(/ +/g, "")?.substring(0, 3) +
-        "_" +
-        bride_name?.replace(/ +/g, "")?.substring(0, 3) +
-        "_" +
-        eventDate.format("DDMMYY");
+      const newUId = (
+        uId ?? generateUId(groom_name, bride_name, eventDate.format("DDMMYYYY"))
+      ).toLowerCase();
       const evs = clone(events);
-      var ev = await refactorEvents(uId.toLowerCase(), evs);
+      var ev = await refactorEvents(newUId, evs);
+      console.log(packages);
       var pcks = await composePackage(ev, data);
-      delete data?.gold_package_price;
-      delete data?.diamond_package_price;
-      data["uid"] = uId.toLowerCase();
+      console.log(pcks);
+      if (!customer_contact) delete data["customer_contact"];
+      if (!customer_email) delete data["customer_email"];
+      data["uid"] = newUId;
       data["packages"] = pcks;
       data["events"] = ev;
       data["wedding_date"] = eventDate.toDate();
-      const docId = doc(db, "stories", uId.toLowerCase());
+      const docId = doc(db, "stories", newUId);
       const docSnap = await getDoc(docId);
       if (coverPhoto) {
-        const url = await uploadFile(
-          uId.toLowerCase(),
-          coverPhoto,
-          "asset/cover_photo"
-        );
+        const url = await uploadFile(newUId, coverPhoto, "asset/cover_photo");
         data["cover_photo"] = url;
       }
       if (docSnap.exists()) {
         await updateDoc(docId, data);
         const existingEvents = docSnap.data()?.events;
-        // ev = _.difference(ev, existingEvents);
+        ev = _.difference(ev, existingEvents);
       } else {
         await setDoc(docId, data);
       }
-      createStorage(uId.toLowerCase(), ev);
+      createStorage(newUId, ev);
       reset();
       setLoading(false);
       navigate("/admin", { replace: true });
@@ -153,15 +160,6 @@ export default function AddressForm() {
       // setErrMessage(err);
       // setShowSnackBar(true);
     }
-  };
-
-  const uploadFile = async (uId, f, path) => {
-    const fileExtension = f?.name?.split(".")[1];
-    const storage = getStorage();
-    const storageRef = ref(storage, uId + "/" + path + "." + fileExtension);
-    await uploadBytes(storageRef, f);
-    const donwloadUrl = await getDownloadURL(storageRef);
-    return donwloadUrl;
   };
 
   const refactorEvents = async (uId, ev) => {
@@ -186,6 +184,13 @@ export default function AddressForm() {
     setPackages({ ...packages });
   };
 
+  const handlePackageType = (v) => {
+    setPackageType(v);
+    setPackages(defaultPackages[v]);
+    setEvents(clone(all_events[v]));
+    setRefresh(!refresh);
+  };
+
   const composePackage = async (ev, d) => {
     var pck = clone(packages);
     const evKeys = _.map(ev, (o) => o.id);
@@ -197,30 +202,6 @@ export default function AddressForm() {
       validity: quotationValidity.toDate(),
     };
     return pck;
-  };
-
-  const createStorage = async (uId, selectedEvents) => {
-    const storage = getStorage();
-    for (let i = 0; i < selectedEvents?.length; i++) {
-      const el = selectedEvents[i]?.name;
-      const storageRef = ref(
-        storage,
-        uId + "/" + el?.replace(/ +/g, "_").toLowerCase() + "/" + "readme.txt"
-      );
-      await uploadBytes(storageRef, ReadMeFie);
-    }
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleBack = () => {
-    navigate("/admin", { replace: true });
-  };
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
   };
 
   const handleLogout = async () => {
@@ -237,52 +218,7 @@ export default function AddressForm() {
 
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={handleBack}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Add clients to the portal
-          </Typography>
-          <div>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
-          </div>
-        </Toolbar>
-      </AppBar>
+      <CFAppBar title={`${uId?"Update":"Add"} client`} handleLogout={handleLogout} />
       <Box
         sx={{
           display: "flex",
@@ -295,6 +231,9 @@ export default function AddressForm() {
           gap: { xs: 5, md: "none" },
         }}
       >
+        {/* <Fab variant="extended" size="small" color="primary" >
+        Extended
+      </Fab> */}
         <React.Fragment>
           <form onSubmit={handleSubmit}>
             <GroomDetails control={control} register={register} />
@@ -316,69 +255,44 @@ export default function AddressForm() {
               style={{ width: "100%", marginTop: 24, marginBottom: 24 }}
             />
 
-            <Grid container spacing={3}>
-              <ClientEvents
-                events={events}
-                pcks={packages}
-                defPacks={defaultPackages}
-                setEvents={setEvents}
-                setRefresh={setRefresh}
-              />
-            </Grid>
-            <Divider style={{ width: "100%" }} />
-            <Typography fontWeight="bold" style={{ margin: "24px 0" }}>
-              Direction & Cover Photo
-            </Typography>
-            <Grid container spacing={3}>
-              <FormGrid size={{ xs: 12, md: 6 }}>
-                <Grid container direction="row" alignItems="center" spacing={6}>
-                  <Typography>Wedding google map location</Typography>
-                  <FormInputText
-                    name="wedding_direction"
-                    control={control}
-                    label="Direction"
-                    placeholder="Loaction from google map"
-                    inputRef={{ ...register("wedding_direction") }}
-                  />
-                </Grid>
-              </FormGrid>
-              <FormGrid size={{ xs: 12, md: 6 }}>
-                <Grid container direction="row" alignItems="center" spacing={6}>
-                  <Typography>Wedding invite cover photo</Typography>
-                  <Button
-                    variant="outlined"
-                    startIcon={<Image />}
-                    component="label"
-                  >
-                    Upload Image File
-                    <input
-                      type="file"
-                      hidden
-                      onChange={handleFileUpload}
-                      accept=".png, .jpg, .jpeg"
-                    />
-                  </Button>
-                  {coverPhoto && (
-                    <FormHelperText style={{ color: "green" }}>
-                      {coverPhoto?.name}
-                    </FormHelperText>
-                  )}
-                </Grid>
-              </FormGrid>
-              <FormGrid size={{ xs: 12, md: 6 }}></FormGrid>
-            </Grid>
-            <Divider style={{ width: "100%" }} />
-            <ClientPackages
+            <PackageDetails
               control={control}
               packages={packages}
+              packageBooked={packageBooked}
+              setPackages={setPackages}
               onPackageChange={handlePackageInputChange}
+              packageType={packageType}
+              setPackageType={(v) => handlePackageType(v)}
               register={register}
-              defPacks={defaultPackages}
               quotationDate={quotationDate}
               setQuotationDate={setQuotationDate}
               quotationValidity={quotationValidity}
               setQuotationValidity={setQuotationValidity}
             />
+            <Divider
+              style={{ width: "100%", marginTop: 24, marginBottom: 24 }}
+            />
+            {packageType && (
+              <Grid>
+                <Grid container spacing={3}>
+                  <ClientEvents
+                    events={events}
+                    pcks={packages}
+                    setEvents={setEvents}
+                    setRefresh={setRefresh}
+                  />
+                </Grid>
+                <Divider style={{ width: "100%" }} />
+              </Grid>
+            )}
+            <DirectionAndCover
+              control={control}
+              register={register}
+              coverPhoto
+              setCoverPhoto
+            />
+            <Divider style={{ width: "100%" }} />
+
             <Grid
               container
               spacing={12}
@@ -396,7 +310,7 @@ export default function AddressForm() {
                   variant="contained"
                   onClick={handleSubmit(onSubmit)}
                 >
-                  Submit
+                 {uId? "Update" : "Save"}
                 </Button>
               </FormGrid>
             </Grid>

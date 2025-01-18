@@ -18,7 +18,7 @@ export const FormInputDate = ({ name, control, label, inputRef }) => {
           control={control}
           render={({ field: { onChange, value } }) => (
             <DatePicker
-              disablePast
+              // disablePast
               label={label}
               value={value}
               onChange={onChange}

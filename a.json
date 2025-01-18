@@ -1,0 +1,718 @@
+{
+  "duel": {
+    "silver": {
+      "id": 1,
+      "title": "Silver Moments Package",
+      "description": "A simple and budget-friendly package designed to capture the essential highlights of your wedding day. With a focus on key moments and traditional photography, this package is perfect for intimate celebrations or couples seeking quality memories at an affordable price.",
+      "deliverables": [
+        {
+          "items": [
+            {
+              "status": true,
+              "label": "All unprocessed & unsorted pics soft copies",
+              "id": 111
+            },
+            {
+              "label": "Edited 60 highlighted images from your event, perfect for sharing on social media.",
+              "status": true,
+              "id": 112
+            }
+          ],
+          "label": "Photographs Soft Copies",
+          "id": 11
+        },
+        {
+          "label": "Printing Materials",
+          "items": [
+            {
+              "status": true,
+              "label": "2 Designed Albums with 40 leaf / 80 pages each, sized 12”x15”.",
+              "id": 121
+            },
+            {
+              "status": true,
+              "label": "2 mini notebook albums, replicating the design and pages of the main albums.",
+              "id": 122
+            },
+            { "status": true, "label": "Two wall Calendar", "id": 123 },
+            { "id": 124, "status": true, "label": "Two table Top Calendar" },
+            {
+              "label": "Two Photo Frame, Sized 12”X18”",
+              "id": 125,
+              "status": true
+            }
+          ],
+          "id": 12
+        },
+        {
+          "items": [
+            {
+              "label": "Two Reels Video of any function (30 Sec to 1 Min)",
+              "status": true,
+              "id": 131
+            },
+            {
+              "status": true,
+              "label": "Highlight Film 1080p Full HD highlight of the wedding. (3 to 5 mins)",
+              "id": 132
+            },
+            {
+              "label": "Full Function Film - 1080p Full HD film covering the full wedding function (Durations of the videos may vary based on the function)",
+              "id": 133,
+              "status": true
+            },
+            {
+              "id": 134,
+              "status": true,
+              "label": "(Durations of the videos may vary based on the function)"
+            }
+          ],
+          "label": "Full HD Films",
+          "id": 13
+        },
+        {
+          "id": 14,
+          "items": [
+            { "id": 141, "status": true, "label": "Custom made Pendrive Box" }
+          ],
+          "label": "Complementary"
+        }
+      ],
+      "price": "200000"
+    },
+    "golden": {
+      "title": "Golden Moments Package (Budgeted)",
+      "offer": "Complementory Pre wedding",
+      "description": "A simple yet elegant package designed to capture your special day with a blend of candid moments and traditional portraits. This package provides essential photography and videography coverage, ensuring you get beautiful memories at an affordable price without compromising on quality.",
+      "id": 2,
+      "deliverables": [
+        {
+          "id": 21,
+          "label": "Photographs Soft Copies",
+          "items": [
+            {
+              "id": 211,
+              "status": true,
+              "label": "All unprocessed & unsorted pics soft copies"
+            },
+            {
+              "id": 212,
+              "status": true,
+              "label": "Edited 100 highlighted images from your event, perfect for sharing on social media."
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "items": [
+            {
+              "id": 221,
+              "status": true,
+              "label": "2 Designed Albums with 50 leaf / 100 pages each, sized 12”x15”."
+            },
+            {
+              "id": 222,
+              "status": true,
+              "label": "2 mini notebook albums, replicating the design and pages of the main albums."
+            },
+            { "status": true, "label": "Two wall Calendar", "id": 223 },
+            { "label": "Two table Top Calendar", "status": true, "id": 224 },
+            {
+              "label": "Two Photo Frame, Sized 12”X18”",
+              "status": true,
+              "id": 225
+            }
+          ],
+          "label": "Printing Materials"
+        },
+        {
+          "id": 23,
+          "items": [
+            {
+              "status": true,
+              "id": 231,
+              "label": "Pre Wedding or Post wedding Video (3 to 5 mins)"
+            },
+            {
+              "label": "Two Reels Video of any function (30 Sec to 1 Min)",
+              "id": 232,
+              "status": true
+            },
+            {
+              "id": 233,
+              "label": "Highlight Film 1080p Full HD highlight of the wedding. (3 to 5 mins)",
+              "status": true
+            },
+            {
+              "label": "Full Function Film - 1080p Full HD film covering the full wedding function",
+              "id": 234,
+              "status": true
+            },
+            {
+              "label": "(Durations of the videos may vary based on the function)",
+              "status": true,
+              "id": 235
+            }
+          ],
+          "label": "Full HD Films"
+        },
+        {
+          "id": 24,
+          "label": "Complementary",
+          "items": [
+            { "label": "Custom made Pendrive Box", "status": true, "id": 241 }
+          ]
+        }
+      ],
+      "price": "280000"
+    },
+    "platinum": {
+      "title": "Platinum Dreams Package (Mid-Tier)",
+      "price": "400000",
+      "description": "A refined package that balances elegance and affordability, offering full-day photography and videography coverage with cinematic storytelling in 4K and a premium-quality photo album. Perfect for couples who want a more comprehensive yet reasonably priced wedding experience.",
+      "deliverables": [
+        {
+          "label": "Web Service",
+          "id": 31,
+          "items": [
+            { "label": "Wedding E Invitation", "id": 311, "status": true },
+            { "label": "Signature Album", "status": true, "id": 312 }
+          ]
+        },
+        {
+          "id": 32,
+          "items": [
+            {
+              "label": "All unprocessed & unsorted pics soft copies",
+              "id": 321,
+              "status": true
+            },
+            {
+              "id": 322,
+              "status": true,
+              "label": "Edited 200 highlighted images from your event, perfect for sharing on social media."
+            }
+          ],
+          "label": "Photographs Soft copies"
+        },
+        {
+          "id": 33,
+          "label": "Printing Materials",
+          "items": [
+            { "label": "Memory Box", "status": true, "id": 331 },
+            {
+              "label": "4 Designed Albums with 40 leaf / 80 pages each, sized 12”x15”.",
+              "id": 332,
+              "status": true
+            },
+            {
+              "id": 333,
+              "label": "4 mini notebook albums, replicating the design and pages of the main albums.",
+              "status": true
+            },
+            {
+              "status": true,
+              "label": "Two  premium Family Photo Frame",
+              "id": 334
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "label": "4K Wedding Films",
+          "items": [
+            {
+              "id": 341,
+              "status": true,
+              "label": "Pre Wedding or Post wedding Video (3 to 5 mins)"
+            },
+            {
+              "label": "Four Reels Video of any function (30 Sec to 1 Min)",
+              "status": true,
+              "id": 342
+            },
+            { "label": "Event Taser (1 to 2 Min)", "status": true, "id": 343 },
+            {
+              "id": 344,
+              "label": "Cinematic Highlights (7 to 10 Min)",
+              "status": true
+            },
+            {
+              "id": 345,
+              "label": "Full Function Film - covering the full wedding function",
+              "status": true
+            },
+            {
+              "id": 346,
+              "status": true,
+              "label": "(Durations of the videos may vary based on the function)"
+            }
+          ]
+        }
+      ],
+      "id": 3,
+      "offer": "Complementory Pre + Post wedding"
+    },
+    "diamond": {
+      "id": 4,
+      "offer": "Complementory Pre + Post wedding",
+      "deliverables": [
+        {
+          "label": "Web Service",
+          "items": [
+            { "status": true, "label": "Wedding E Invitation", "id": 411 },
+            { "status": true, "label": "Signature Album", "id": 412 }
+          ],
+          "id": 41
+        },
+        {
+          "id": 42,
+          "label": "Photographs Soft copies",
+          "items": [
+            {
+              "status": true,
+              "id": 421,
+              "label": "All unprocessed & unsorted pics soft copies"
+            },
+            {
+              "id": 422,
+              "label": "Edited 300 highlighted images from your event, perfect for sharing on social media.",
+              "status": true
+            }
+          ]
+        },
+        {
+          "label": "Printing Materials",
+          "id": 43,
+          "items": [
+            { "id": 431, "label": "Wedding chronicles", "status": true },
+            { "id": 432, "label": "Memory Box", "status": true },
+            {
+              "status": true,
+              "id": 433,
+              "label": "4 Designed Albums with 50 leaf / 100 pages each, sized 12”x15”."
+            },
+            {
+              "status": true,
+              "id": 434,
+              "label": "4 mini notebook albums, replicating the design and pages of the main albums."
+            },
+            {
+              "status": true,
+              "id": 435,
+              "label": "Wedding Magazine (10 Copies, same design)"
+            },
+            {
+              "status": true,
+              "id": 436,
+              "label": "Two Premium Digital Couple Drawing frame ( Same image for both canvas)"
+            },
+            {
+              "id": 437,
+              "status": true,
+              "label": "Two  premium Family Photo Frame"
+            }
+          ]
+        },
+        {
+          "id": 44,
+          "label": "4K Wedding Films",
+          "items": [
+            {
+              "id": 441,
+              "label": "Pre Wedding or Post wedding Video (3 to 5 mins)",
+              "status": true
+            },
+            {
+              "id": 442,
+              "status": true,
+              "label": "Four Reels Video of any function (30 Sec to 1 Min)"
+            },
+            { "status": true, "id": 443, "label": "Event Taser (1 to 2 Min)" },
+            {
+              "status": true,
+              "id": 444,
+              "label": "Cinematic Highlights (7 to 10 Min)"
+            },
+            {
+              "label": "Wedding Documentary (30 to 45 Min)",
+              "id": 445,
+              "status": true
+            },
+            {
+              "status": true,
+              "id": 446,
+              "label": "Full Function Film –  covering the full wedding function"
+            },
+            {
+              "label": "(Durations of the videos may vary based on the function)",
+              "id": 447,
+              "status": true
+            }
+          ]
+        }
+      ],
+      "description": "Elevate your wedding story with this premium package, offering cinematic 4K videography, artistic photography, and a stunningly crafted royal photo album. Perfect for couples who value detailed and creative storytelling, this package ensures your memories are preserved with unparalleled elegance and quality.",
+      "title": "Diamond Memories Package (Premium)",
+      "price": "750000"
+    }
+  },
+  "single": {
+    "silver": {
+      "id": 1,
+      "title": "Silver Moments Package",
+      "description": "A simple and budget-friendly package designed to capture the essential highlights of your wedding day. With a focus on key moments and traditional photography, this package is perfect for intimate celebrations or couples seeking quality memories at an affordable price.",
+      "deliverables": [
+        {
+          "items": [
+            {
+              "status": true,
+              "label": "All unprocessed & unsorted pics soft copies",
+              "id": 111
+            },
+            {
+              "label": "Edited 40 highlighted images from your event, perfect for sharing on social media.",
+              "status": true,
+              "id": 112
+            }
+          ],
+          "label": "Photographs Soft Copies",
+          "id": 11
+        },
+        {
+          "label": "Printing Materials",
+          "items": [
+            {
+              "status": true,
+              "label": "1 Designed Albums with 40 leaf / 80 pages each, sized 12”x15”.",
+              "id": 121
+            },
+            {
+              "status": true,
+              "label": "1 mini notebook albums, replicating the design and pages of the main albums.",
+              "id": 122
+            },
+            { "status": true, "label": "One wall Calendar", "id": 123 },
+            { "id": 124, "status": true, "label": "One table Top Calendar" },
+            {
+              "label": "One Photo Frame, Sized 12”X18”",
+              "id": 125,
+              "status": true
+            }
+          ],
+          "id": 12
+        },
+        {
+          "items": [
+            {
+              "label": "Two Reels Video of any function (30 Sec to 1 Min)",
+              "status": true,
+              "id": 131
+            },
+            {
+              "status": true,
+              "label": "Highlight Film 1080p Full HD highlight of the wedding. (3 to 5 mins)",
+              "id": 132
+            },
+            {
+              "label": "Full Function Film – 1080p Full HD film covering the full wedding function",
+              "id": 133,
+              "status": true
+            },
+            {
+              "id": 134,
+              "status": true,
+              "label": "(Durations of the videos may vary based on the function)"
+            }
+          ],
+          "label": "Full HD Films",
+          "id": 13
+        },
+        {
+          "id": 14,
+          "items": [
+            { "id": 141, "status": true, "label": "Custom made Pendrive Box" }
+          ],
+          "label": "Complementary"
+        }
+      ],
+      "price": "120000"
+    },
+    "golden": {
+      "title": "Golden Moments Package (Budgeted)",
+      "offer": "Complementory Pre wedding",
+      "description": "A simple yet elegant package designed to capture your special day with a blend of candid moments and traditional portraits. This package provides essential photography and videography coverage, ensuring you get beautiful memories at an affordable price without compromising on quality.",
+      "id": 2,
+      "deliverables": [
+        {
+          "id": 21,
+          "label": "Photographs Soft Copies",
+          "items": [
+            {
+              "id": 211,
+              "status": true,
+              "label": "All unprocessed & unsorted pics soft copies"
+            },
+            {
+              "id": 212,
+              "status": true,
+              "label": "Edited 100 highlighted images from your event, perfect for sharing on social media."
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "items": [
+            {
+              "id": 221,
+              "status": true,
+              "label": "1 Designed Albums with 40 leaf / 80 pages each, sized 12”x15”."
+            },
+            {
+              "id": 222,
+              "status": true,
+              "label": "1 mini notebook albums, replicating the design and pages of the main albums."
+            },
+            { "status": true, "label": "Two wall Calendar", "id": 223 },
+            { "label": "One table Top Calendar", "status": true, "id": 224 },
+            {
+              "label": "One Photo Frame, Sized 12”X18”",
+              "status": true,
+              "id": 225
+            }
+          ],
+          "label": "Printing Materials"
+        },
+        {
+          "id": 23,
+          "items": [
+            {
+              "status": true,
+              "id": 231,
+              "label": "Pre Wedding or Post wedding Video (3 to 5 mins)"
+            },
+            {
+              "label": "Two Reels Video of any function (30 Sec to 1 Min)",
+              "id": 232,
+              "status": true
+            },
+            {
+              "id": 233,
+              "label": "Highlight Film 1080p Full HD highlight of the wedding. (3 to 5 mins)",
+              "status": true
+            },
+            {
+              "label": "Full Function Film - 1080p Full HD film covering the full wedding function",
+              "id": 234,
+              "status": true
+            },
+            {
+              "label": "(Durations of the videos may vary based on the function)",
+              "status": true,
+              "id": 235
+            }
+          ],
+          "label": "Full HD Films"
+        },
+        {
+          "id": 24,
+          "label": "Complementary",
+          "items": [
+            { "label": "Custom made Pendrive Box", "status": true, "id": 241 }
+          ]
+        }
+      ],
+      "price": "200000"
+    },
+    "platinum": {
+      "title": "Platinum Dreams Package (Mid-Tier)",
+      "price": "300000",
+      "description": "A refined package that balances elegance and affordability, offering full-day photography and videography coverage with cinematic storytelling in 4K and a premium-quality photo album. Perfect for couples who want a more comprehensive yet reasonably priced wedding experience.",
+      "deliverables": [
+        {
+          "label": "Web Service",
+          "id": 31,
+          "items": [
+            { "label": "Wedding E Invitation", "id": 311, "status": true },
+            { "label": "Signature Album", "status": true, "id": 312 }
+          ]
+        },
+        {
+          "id": 32,
+          "items": [
+            {
+              "label": "All unprocessed & unsorted pics soft copies",
+              "id": 321,
+              "status": true
+            },
+            {
+              "id": 322,
+              "status": true,
+              "label": "Edited 200 highlighted images from your event, perfect for sharing on social media."
+            }
+          ],
+          "label": "Photographs Soft copies"
+        },
+        {
+          "id": 33,
+          "label": "Printing Materials",
+          "items": [
+            { "label": "Memory Box", "status": true, "id": 331 },
+            {
+              "label": "2 Designed Albums with 40 leaf / 80 pages each, sized 12”x15”.",
+              "id": 332,
+              "status": true
+            },
+            {
+              "id": 333,
+              "label": "2 mini notebook albums, replicating the design and pages of the main albums.",
+              "status": true
+            },
+            {
+              "status": true,
+              "label": "Two premium Family Photo Frame",
+              "id": 334
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "label": "4K Wedding Films",
+          "items": [
+            {
+              "id": 341,
+              "status": true,
+              "label": "Pre Wedding or Post wedding Video (3 to 5 mins)"
+            },
+            {
+              "label": "Four Reels Video of any function (30 Sec to 1 Min)",
+              "status": true,
+              "id": 342
+            },
+            { "label": "Event Taser (1 to 2 Min)", "status": true, "id": 343 },
+            {
+              "id": 344,
+              "label": "Cinematic Highlights (7 to 10 Min)",
+              "status": true
+            },
+            {
+              "id": 345,
+              "label": "Full Function Film - covering the full wedding function",
+              "status": true
+            },
+            {
+              "id": 346,
+              "status": true,
+              "label": "(Durations of the videos may vary based on the function)"
+            }
+          ]
+        }
+      ],
+      "id": 3,
+      "offer": "Complementory Pre + Post wedding"
+    },
+    "diamond": {
+      "id": 4,
+      "offer": "Complementory Pre + Post wedding",
+      "deliverables": [
+        {
+          "label": "Web Service",
+          "items": [
+            { "status": true, "label": "Wedding E Invitation", "id": 411 },
+            { "status": true, "label": "Signature Album", "id": 412 }
+          ],
+          "id": 41
+        },
+        {
+          "id": 42,
+          "label": "Photographs Soft copies",
+          "items": [
+            {
+              "status": true,
+              "id": 421,
+              "label": "All unprocessed & unsorted pics soft copies"
+            },
+            {
+              "id": 422,
+              "label": "Edited 300 highlighted images from your event, perfect for sharing on social media.",
+              "status": true
+            }
+          ]
+        },
+        {
+          "label": "Printing Materials",
+          "id": 43,
+          "items": [
+            { "id": 431, "label": "Wedding chronicles", "status": true },
+            { "id": 432, "label": "Memory Box", "status": true },
+            {
+              "status": true,
+              "id": 433,
+              "label": "4 Designed Albums with 50 leaf / 100 pages each, sized 12”x15”."
+            },
+            {
+              "status": true,
+              "id": 434,
+              "label": "4 mini notebook albums, replicating the design and pages of the main albums."
+            },
+            {
+              "status": true,
+              "id": 435,
+              "label": "Wedding Magazine (10 Copies, same design)"
+            },
+            {
+              "status": true,
+              "id": 436,
+              "label": "Two Premium Digital Couple Drawing frame ( Same image for both canvas)"
+            },
+            {
+              "id": 437,
+              "status": true,
+              "label": "Two  premium Family Photo Frame"
+            }
+          ]
+        },
+        {
+          "id": 44,
+          "label": "4K Wedding Films",
+          "items": [
+            {
+              "id": 441,
+              "label": "Pre Wedding or Post wedding Video (3 to 5 mins)",
+              "status": true
+            },
+            {
+              "id": 442,
+              "status": true,
+              "label": "Four Reels Video of any function (30 Sec to 1 Min)"
+            },
+            { "status": true, "id": 443, "label": "Event Taser (1 to 2 Min)" },
+            {
+              "status": true,
+              "id": 444,
+              "label": "Cinematic Highlights (7 to 10 Min)"
+            },
+            {
+              "label": "Wedding Documentary (30 to 45 Min)",
+              "id": 445,
+              "status": true
+            },
+            {
+              "status": true,
+              "id": 446,
+              "label": "Full Function Film - covering the full wedding function"
+            },
+            {
+              "label": "(Durations of the videos may vary based on the function)",
+              "id": 447,
+              "status": true
+            }
+          ]
+        }
+      ],
+      "description": "Elevate your wedding story with this premium package, offering cinematic 4K videography, artistic photography, and a stunningly crafted royal photo album. Perfect for couples who value detailed and creative storytelling, this package ensures your memories are preserved with unparalleled elegance and quality.",
+      "title": "Diamond Memories Package (Premium)",
+      "price": "600000"
+    }
+  }
+}

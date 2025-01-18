@@ -19,6 +19,7 @@ import Watermark from "../../../components/Watermark";
 import DateSlider from "./DateSlider";
 import Highlights from "./Highlights";
 import { package_variants } from "../../../constants/packages";
+import { clone } from "../../../shared/StringUtils";
 
 const Packs = ({ printRef }) => {
   const [loading, setLoading] = React.useState(0);
@@ -54,6 +55,12 @@ const Packs = ({ printRef }) => {
     fetchStoryData(storyId);
   }, [storyId]);
 
+  const sortedPackages = () => {
+    const pck = data.package_suggestions ?? package_variants;
+    const sortedPck = clone(package_variants).filter((v) => pck.includes(v));
+    return sortedPck ?? [];
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -80,23 +87,59 @@ const Packs = ({ printRef }) => {
     );
   }
 
+  const directPackage = () => {
+    const v = data?.package_booked;
+    if (v) {
+      return (
+        <Grid
+          size={{
+            xs: 12,
+            md: 12,
+            lg: 8,
+          }}
+        >
+          <PackageType
+            pack={data?.packages[v]}
+            size={1}
+            events={data?.events}
+            variant={v}
+          />
+        </Grid>
+      );
+    }
+    return sortedPackages().map((v, k) => {
+      if (data?.packages[v]) {
+        const size = sortedPackages().length;
+        return (
+          <Grid
+            size={{
+              xs: 12,
+              md: size == 1 ? 12 : 6,
+              lg: size == 1 ? 8 : 6,
+            }}
+            key={k}
+          >
+            <PackageType
+              pack={data?.packages[v]}
+              size={size}
+              events={data?.events}
+              variant={v}
+            />
+          </Grid>
+        );
+      }
+    });
+  };
+
   return (
     <>
       <div>
         <Grid container direction="column" spacing={2}>
           {data && <ClientDetails data={data} />}
-          <Highlights />
-          <Grid container spacing={4} direction="row">
-            {package_variants.map((v, k) => {
-              return data?.packages[v] ? (
-                <Grid size={{ xs: 12, md: 6 }} key={k}>
-                  <PackageType pack={data?.packages[v]} events={data?.events} variant={v} />
-                </Grid>
-              ) : (
-                <Grid key={k}/>
-              );
-            })}
+          <Grid container spacing={4} direction="row" justifyContent="center">
+            {directPackage()}
           </Grid>
+          <Highlights />
           <Payment />
           <AddOns />
           <ImportantNotes />

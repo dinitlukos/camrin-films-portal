@@ -11,6 +11,7 @@ export const FormInputText = ({
   message,
   size = "small",
   placeholder = "",
+  rules={},
   containerSize = { xs: 12, md: 6 },
   type = "text",
 }) => {
@@ -22,6 +23,7 @@ export const FormInputText = ({
     <Controller
       name={name}
       control={control}
+      rules={rules}
       render={({
         field: { onChange, value },
         fieldState: { error },

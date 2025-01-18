@@ -3,7 +3,7 @@ import { payment_terms } from "../constants/payment";
 import { clone } from "./StringUtils";
 
 const getPercentage = (events, e, mode) => {
-  if (mode == "classic") {
+  if (mode == "silver") {
     switch (e) {
       case "booking":
         return 10;
@@ -14,7 +14,30 @@ const getPercentage = (events, e, mode) => {
       default:
         return 0;
     }
-  } else {
+  } else if (mode == "golden") {
+    switch (e) {
+      case "booking":
+        return 10;
+      case "engagement":
+        return _.includes(events, "wedding") ? 40 : 80;
+      case "wedding":
+        return _.includes(events, "engagement") ? 40 : 80;
+      default:
+        return 0;
+    }
+  } else if (mode == "platinum") {
+    switch (e) {
+      case "booking":
+        return 10;
+      case "engagement":
+        return _.includes(events, "wedding") ? 35 : 75;
+      case "wedding":
+        return _.includes(events, "engagement") ? 40 : 75;
+      default:
+        return 0;
+    }
+  }
+   else {
     switch (e) {
       case "booking":
         return 20;

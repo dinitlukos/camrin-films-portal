@@ -34,7 +34,7 @@ const Deliverables = ({ deliverables = [], color }) => {
             style={{ backgroundColor: alpha(color, 0.3), textAlign: "center" }}
             size={{ xs: 12, md: 4 }}
           >
-            <Typography>{v?.title}</Typography>
+            <Typography>{v?.label}</Typography>
           </Grid>
           <Grid
             container
@@ -53,7 +53,7 @@ const Deliverables = ({ deliverables = [], color }) => {
                   <ListItemIcon style={{ minWidth: "34px", marginTop:"6px" }} >
                     <StarIcon fontSize="12" color={alpha(color, 0.3)}/>
                   </ListItemIcon>
-                  <ListItemText>{cv}</ListItemText>
+                  <ListItemText>{cv?.label}</ListItemText>
                 </ListItem>
               ))}
             </List>

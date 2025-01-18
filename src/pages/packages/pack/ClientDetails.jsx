@@ -1,31 +1,20 @@
-import React from "react";
+import { alpha, Card, List, Typography, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import {
-  alpha,
-  Avatar,
-  Card,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import { LocationOn, PeopleOutline, Event } from "@mui/icons-material";
-import AvatarListItem from "../../../components/AvatarListItem";
-import moment from "moment";
 import _ from "lodash";
+import moment from "moment";
+import React from "react";
+import calendarImage from "../../../assets/calendar_primary.png";
 import spiral from "../../../assets/packages/spiral.svg";
 import spiralSecondary from "../../../assets/packages/spiral_secondary.svg";
-import calendarImage from "../../../assets/calendar_primary.png";
+import AvatarListItem from "../../../components/AvatarListItem";
 
-import DateSlider from "./DateSlider";
+import { package_mode_label } from "../../../constants/packages";
 
 const ClientDetails = ({ data }) => {
   const theme = useTheme();
   return (
-    <Grid container spacing={4}>
-      <Grid size={{ xs: 12, md: 4 }} order={{ xs:2, sm: 2, md: 1 }}>
+    <Grid container spacing={4} alignItems="center" justifyContent="center">
+      <Grid size={{ xs: 12, md: 4 }} order={{ xs: 2, sm: 2, md: 1 }}>
         <Grid container alignItems="center" justifyContent="center">
           <Grid
             container
@@ -55,7 +44,10 @@ const ClientDetails = ({ data }) => {
             />
           </Grid>
           <List>
-            <AvatarListItem label={data?.package_type ??"Bride & Groom"} icon="people" />
+            <AvatarListItem
+              label={package_mode_label[data?.package_type ?? "duel"]}
+              icon="people"
+            />
             <AvatarListItem
               label={_.map(data?.events, "name").join(", ")}
               icon="event"
@@ -65,31 +57,55 @@ const ClientDetails = ({ data }) => {
         </Card>
       </Grid>
       <Grid
+        container
+        spacing={2}
+        direction="column"
         size={{ xs: 12, md: 4 }}
-        order={{xs:1,  sm: 1, md: 2 }}
-        alignContent="center"
-        justifyItems="center"
+        order={{ xs: 1, sm: 1, md: 2 }}
+        alignItems="center"
+        justifyContent="center"
       >
-        <div
-          className="calendar-date"
-          style={{
+        <Grid
+          container
+          justifyContent="center"
+          alignItems="center"
+          direction="column"
+          spacing={1}
+          sx={{
+            height: "170px",
+            width: "130px",
+            pt: "45px",
+            textAlign: "center",
             backgroundImage: `url(${calendarImage})`,
-            backgroundSize: "cover",
+            backgroundSize: "100%",
+            backgroundRepeat:"round"
           }}
         >
-          <div className="calendar-title">WEDDING</div>
-          <div className="pack-calendar-day">
+          <Typography variant="body2" component="div" color="textPrimary">
+            WEDDING
+          </Typography>
+          <Typography
+            component="div"
+            variant="h4"
+            padding="0"
+            color="primary"
+            fontWeight="900"
+          >
             {moment(data?.wedding_date?.toDate()).format("DD")}
-          </div>
-          <div style={{ color: "#000", fontSize: ".8rem" }}>
+          </Typography>
+          <Typography variant="body2" component="div" color="textPrimary">
             {moment(data?.wedding_date?.toDate()).format("MMM yyyy")}
-          </div>
-        </div>
-        {/* <DateSlider data={data}/> */}
-
-        <Typography variant="h5" className="name" align="center">
-          {data?.groom_name?.split(" ")[0]} & {data?.bride_name?.split(" ")[0]}
-        </Typography>
+          </Typography>
+        </Grid>
+        <Grid>
+          <Typography variant="h5" className="name" align="center">
+            {!data?.groom_name || !data?.bride_name
+              ? "Wedding Package"
+              : _.capitalize(data?.groom_name?.split(" ")[0]) +
+                " & " +
+                _.capitalize(data?.bride_name?.split(" ")[0])}
+          </Typography>
+        </Grid>
       </Grid>
       <Grid
         size={{ xs: 12, md: 4 }}

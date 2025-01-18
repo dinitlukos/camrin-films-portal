@@ -18,12 +18,12 @@ import { useState } from "react";
 const Terms = () => {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(true);
-  
+
   return (
     <Grid>
       <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
         <AccordionSummary
-          expandIcon={<ArrowDropDownIcon />}
+          // expandIcon={<ArrowDropDownIcon />}
           aria-controls="panel2-content"
           id="panel2-header"
         >
@@ -36,11 +36,20 @@ const Terms = () => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Once the advance payment is made and services are confirmed, we will assign professionals for your event. In case of cancellation, the following terms will apply:
+          <Typography>
+            Once the advance payment is made and services are confirmed, we will
+            assign professionals for your event. In case of cancellation, the
+            following terms will apply:
           </Typography>
           <List>
             {(terms_service_cancellation ?? []).map((v, k) => (
-              <ListItem key={k} dense disablePadding disableGutters alignItems='flex-start'>
+              <ListItem
+                key={k}
+                dense
+                disablePadding
+                disableGutters
+                alignItems="flex-start"
+              >
                 <ListItemIcon style={{ minWidth: "34px" }}>
                   <StarIcon fontSize="12" />
                 </ListItemIcon>

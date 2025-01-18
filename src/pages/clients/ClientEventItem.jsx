@@ -91,7 +91,7 @@ const ClientEventItem = ({
                     {dateChecked && (
                       <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
-                          disablePast
+                          // disablePast
                           slotProps={{ textField: { size: "small" } }}
                           value={date}
                           label={event?.name + " Date"}

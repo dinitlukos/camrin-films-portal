@@ -10,36 +10,70 @@ import { FormInputText } from "../../components/FormInputText";
 const WeddingDetails = ({ control, register, eventDate, setEventDate }) => {
   return (
     <Grid marginBottom="12px">
-      <Grid container spacing={3} marginBottom="12px">
-        <Typography fontWeight="bold">Wedding Details</Typography>
+      <Grid container spacing={3} marginBottom="24px">
+        <Typography fontWeight="bold" color="primary">
+          Wedding Details
+        </Typography>
       </Grid>
       <Grid container spacing={3}>
         <FormInputText
-          name="guest_contact"
+          name="customer_contact"
           control={control}
-          label="Guest Contact Number"
-          message="Invalid Phone Number"
+          label="Contact Number"
+          message="Either a valid Phone number or Email is required"
+          rules={{
+            validate: (value, formValue) => {
+              if (value) {
+                return !!value.match(
+                  /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g
+                );
+              } else if (formValue.customer_email) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+          }}
           inputRef={{
-            ...register("guest_contact", {
-              required: true,
-              pattern: `^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$`,
-            }),
+            ...register("customer_contact"),
+          }}
+        />
+        <FormInputText
+          name="customer_email"
+          control={control}
+          label="Email"
+          rules={{
+            validate: (value, formValue) => {
+              if (value) {
+                return !!value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+              } else if (formValue.customer_contact) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+          }}
+          message="Either a valid Phone number or Email is required"
+          inputRef={{
+            ...register("customer_email"),
           }}
         />
         <FormInputText
           name="wedding_location"
+          containerSize={{ xs: 12, md: 4 }}
           control={control}
           label="Wedding Location"
           placeholder="Auditorium or Church/Temple name"
           inputRef={{
-            ...register("wedding_location", { required: true }),
+            ...register("wedding_location"),
           }}
         />
-        <FormGrid size={{ xs: 12, md: 6 }}>
+        <FormGrid size={{ xs: 12, md: 4 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
-              disablePast
+              // disablePast
               label="Wedding Date"
+              slotProps={{ textField: { size: "small" } }}
               value={eventDate}
               onChange={(e) => setEventDate(e)}
             />
@@ -48,14 +82,14 @@ const WeddingDetails = ({ control, register, eventDate, setEventDate }) => {
 
         <FormInputText
           name="wedding_time"
+          containerSize={{ xs: 12, md: 4 }}
           control={control}
           label="Wedding Time"
-          size="medium"
+          size="small"
           placeholder="11:05 am to 11.45 am / 10.00 am"
-          inputRef={{ ...register("wedding_time", { required: true }) }}
+          inputRef={{ ...register("wedding_time") }}
         />
       </Grid>
-      <Divider style={{ width: "100%" }} />
     </Grid>
   );
 };

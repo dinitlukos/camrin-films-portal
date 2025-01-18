@@ -30,5 +30,6 @@ export const locations =[
     "Thrissur",
     "Trivandrum",
     "Wayanad",
+    "Other"
   ];
   

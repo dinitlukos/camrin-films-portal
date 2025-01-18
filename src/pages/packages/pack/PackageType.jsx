@@ -16,23 +16,33 @@ import PaymentTerms from "./PaymentTerms";
 import _ from "lodash";
 import { clone } from "../../../shared/StringUtils";
 
-
-const PackageType = ({ pack, variant = "classic", events }) => {
+const PackageType = ({ pack, variant = "golden", events, size }) => {
   const theme = useTheme();
-  const color =
-    variant == "premium"
-      ? theme.palette.primary.main
-      : theme.palette.secondary.main;
+  const color = {
+    silver: theme.palette.info.main,
+    golden: theme.palette.secondary.main,
+    platinum: theme.palette.warning.main,
+    diamond: theme.palette.primary.main,
+  };
 
-  const shadow =
-    variant == "premium"
-      ? "2px 1px 1px rgba(184, 43, 60, .2),0px 1px 1px 0px rgba(184, 43, 60, .14),0px 1px 3px 0px rgba(184, 43, 60, 1)"
-      : "2px 1px 1px rgba(114, 58, 122, .2),0px 1px 1px 0px rgba(114, 58, 122, .14),0px 1px 3px 0px rgba(114, 58, 122, 1)";
+  const color_strings = {
+    silver: "info",
+    golden: "secondary",
+    platinum:"warning",
+    diamond: "primary",
+  };
+
+  const shadow = {
+    silver: "2px 1px 1px rgba(58, 98, 122, .2),0px 1px 1px 0px rgba(58, 98, 122, .14),0px 1px 3px 0px rgba(58, 98, 122, 1)",
+    golden: "2px 1px 1px rgba(114, 58, 122, .2),0px 1px 1px 0px rgba(114, 58, 122, .14),0px 1px 3px 0px rgba(114, 58, 122, 1)",
+    platinum: "2px 1px 1px rgba(122,82,58, .2),0px 1px 1px 0px rgba(122,82,58, .14),0px 1px 3px 0px rgba(122,82,58, 1)",
+    diamond: "2px 1px 1px rgba(184, 43, 60, .2),0px 1px 1px 0px rgba(184, 43, 60, .14),0px 1px 3px 0px rgba(184, 43, 60, 1)"
+  }
   return (
     <Grid container style={{ height: "100%" }}>
-      <Card style={{ boxShadow: shadow }}>
+      <Card style={{ boxShadow: shadow[variant] }}>
         <Grid
-          style={{ backgroundColor: color, padding: "10px 10px" }}
+          style={{ backgroundColor: color[variant], padding: "10px 10px" }}
           container
           justifyItems="center"
           alignItems="center"
@@ -48,27 +58,36 @@ const PackageType = ({ pack, variant = "classic", events }) => {
           <Grid
             style={{
               backgroundColor: "#fff",
-              color: color,
+              color: color[variant],
               padding: "5px 10px",
               borderRadius: "10px",
             }}
           >
             <Typography fontWeight="bold">
-              Rs. {(pack?.price ?? "0").toString().replace(/(\d)(?=(\d\d)+\d$)/g, "$1,")}/-
+              Rs.{" "}
+              {(pack?.price ?? "0")
+                .toString()
+                .replace(/(\d)(?=(\d\d)+\d$)/g, "$1,")}
+              /-
             </Typography>
           </Grid>
         </Grid>
-        <Grid padding={4} container justifyContent="center" direction="column" style={{backgroundImage: `url(${logo})`, backgroundSize:'contain'}}>
+        <Grid
+          padding={4}
+          container
+          justifyContent="center"
+          // alignItems="center"
+          direction="column"
+          style={{ backgroundImage: `url(${logo})`, backgroundSize: "contain" }}
+        >
           <Grid>
             <Typography>{pack?.description}</Typography>
           </Grid>
           <Grid container direction="column">
             {(clone(events) ?? []).map((v, k) => {
-              console.log(v?.services)
-              console.log()
-              const s = _.keyBy(v?.services, "id")
-              const items = s[variant]?.items ?? []
-              if(items.length > 0)
+              const s = _.keyBy(v?.services, "id");
+              const items = s[variant]?.items ?? [];
+              if (items.length > 0)
                 return (
                   <Grid key={k} container direction="column">
                     <Divider style={{ margin: "12px 0" }}>
@@ -76,29 +95,18 @@ const PackageType = ({ pack, variant = "classic", events }) => {
                         label={v?.name}
                         variant="filled"
                         style={{
-                          backgroundColor: alpha(
-                            variant == "premium"
-                              ? theme.palette.primary.main
-                              : theme.palette.secondary.main,
-                            0.2
-                          ),
-                          color: color,
+                          backgroundColor: alpha(color[variant], 0.2),
+                          color: color[variant],
                         }}
                       />
                     </Divider>
-                    {items.map((cv, ck) => (
+                    {items.map((cv, ck) => cv?.status ?
                       <FormControlLabel
                         key={ck}
-                        control={
-                          <CheckBox
-                            color={
-                              variant == "premium" ? "primary" : "secondary"
-                            }
-                          />
-                        }
+                        control={<CheckBox color={color_strings[variant]} />}
                         label={cv.label}
-                      />
-                    ))}
+                      /> : <Grid/>
+                    )}
                   </Grid>
                 );
             })}
@@ -113,7 +121,7 @@ const PackageType = ({ pack, variant = "classic", events }) => {
                 <Grid
                   container
                   alignItems="center"
-                  style={{ backgroundColor: color, minHeight: "50px" }}
+                  style={{ backgroundColor: color[variant], minHeight: "50px" }}
                 >
                   <div className="tri"></div>
                   <div className="blink">{pack?.offer}</div>
@@ -122,11 +130,16 @@ const PackageType = ({ pack, variant = "classic", events }) => {
             )}
           </Grid>
           {pack?.deliverables && (
-            <Deliverables deliverables={pack?.deliverables} color={color} />
+            <Deliverables
+              deliverables={pack?.deliverables}
+              color={color[variant]}
+            />
           )}
-          {
-            pack?.payment_terms && (<PaymentTerms terms={pack?.payment_terms} color={color}/>)
-          }
+          {pack?.payment_terms && (
+            <Grid size={{md: 12}}>
+            <PaymentTerms terms={pack?.payment_terms} color={color[variant]} />
+            </Grid>
+          )}
         </Grid>
       </Card>
     </Grid>

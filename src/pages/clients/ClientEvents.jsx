@@ -1,14 +1,10 @@
 import {
-  Checkbox,
-  FormControlLabel,
-  FormHelperText,
-  Typography,
+  Typography
 } from "@mui/material";
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
+import _ from "lodash";
 import React from "react";
 import ClientEventItem from "./ClientEventItem";
-import _ from "lodash";
 
 const ClientEvents = ({ events,pcks, defPacks, setEvents, setRefresh }) => {
   const handleEventStatus = (i) => {
@@ -49,7 +45,7 @@ const ClientEvents = ({ events,pcks, defPacks, setEvents, setRefresh }) => {
   return (
     <Grid container style={{ width: "100%" }}>
       <Grid sx={{ mb: 2 }}>
-        <Typography fontWeight="bold">Events</Typography>
+        <Typography fontWeight="bold" color="primary">Events</Typography>
       </Grid>
       <Grid container>
         {events.map((v, k) => (

@@ -14,7 +14,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import _ from "lodash";
+import _, { update } from "lodash";
 import { styled } from "@mui/material/styles";
 
 import AppBar from "@mui/material/AppBar";
@@ -23,8 +23,14 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 
-import { collection, doc, deleteDoc, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import {
+  collection,
+  doc,
+  deleteDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../../firebase";
 import {
   Button,
   Chip,
@@ -33,18 +39,21 @@ import {
   Link,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
-import { AuthContext } from "../auth/AuthProvider";
-import Loader from "./Loader";
-import { generateUid } from "../shared/StringUtils";
+import { AuthContext } from "../../../auth/AuthProvider";
+import Loader from "../../Loader";
+import PackageBook from "./Book";
+import ConfirmModel from "./ConfirmModel";
 
 const COL_KEYS = [
   "id",
   "bride_name",
   "groom_name",
   "wedding_date",
+  "package_booked",
   "uid",
   "events",
 ];
@@ -82,12 +91,13 @@ function createData(
 
 export default function AdminHome() {
   const navigate = useNavigate();
+  const theme = useTheme();
   const [rows, setRows] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { logOut } = React.useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [selectedRow, setSelectedRow] = useState();
   const [open, setOpen] = useState(false);
-  console.log(location.host);
 
   const fetchStories = async () => {
     const docSnap = await getDocs(collection(db, "stories"));
@@ -114,8 +124,23 @@ export default function AdminHome() {
 
   const handleDelete = async (row) => {
     try {
+      handleModelClose();
       setLoading(true);
-      await deleteDoc(doc(db, "stories", row?.id));
+      await deleteDoc(doc(db, "stories", selectedRow?.id));
+      await fetchStories();
+      setSelectedRow(null);
+      setLoading(false);
+    } catch (err) {
+      handleModelClose();
+      setSelectedRow(null);
+      setLoading(false);
+    }
+  };
+
+  const handleBook = async (pack, row) => {
+    try {
+      setLoading(true);
+      await updateDoc(doc(db, "stories", row?.id), { package_booked: pack });
       await fetchStories();
       setLoading(false);
     } catch (err) {
@@ -133,6 +158,11 @@ export default function AdminHome() {
     }
   };
 
+  const openConfirm = (row) => {
+    setSelectedRow(row);
+    setOpen(true);
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -146,8 +176,7 @@ export default function AdminHome() {
   };
 
   const handleNavigation = (uid) => {
-    console.log(location)
-    const url = location.origin + "/packages/" + uid ;
+    const url = location.origin + "/packages/" + uid;
     window.open(url, "_blank").focus();
   };
 
@@ -190,11 +219,11 @@ export default function AdminHome() {
         </Toolbar>
       </AppBar>
       <Grid container spacing={3} justifyContent="end">
-        <Stack container spacing={3} paddingRight={6} paddingTop={4}>
+        <Grid container spacing={3} paddingRight={6} paddingTop={4}>
           <Button variant="outlined" onClick={handleAddClient}>
             Add Client
           </Button>
-        </Stack>
+        </Grid>
       </Grid>
       <Grid padding={3}>
         <TableContainer component={Paper}>
@@ -204,6 +233,7 @@ export default function AdminHome() {
                 <StyledTableCell>Groom Name</StyledTableCell>
                 <StyledTableCell>Bride Name</StyledTableCell>
                 <StyledTableCell>Wedding Date&nbsp;</StyledTableCell>
+                <StyledTableCell>Booked Package&nbsp;</StyledTableCell>
                 <StyledTableCell>Package Link&nbsp;</StyledTableCell>
                 <StyledTableCell>Events&nbsp;</StyledTableCell>
                 <StyledTableCell>Actions&nbsp;</StyledTableCell>
@@ -222,16 +252,20 @@ export default function AdminHome() {
                   <StyledTableCell>
                     {moment(row.wedding_date.toDate()).format("Do MMM yyyy")}
                   </StyledTableCell>
+                  <StyledTableCell>{row.package_booked ?? ""}</StyledTableCell>
                   <StyledTableCell>
                     <Link
                       component="button"
                       onClick={() => handleNavigation(row?.uid)}
-                    >{row?.uid}</Link>
+                    >
+                      {row?.uid}
+                    </Link>
                   </StyledTableCell>
                   <StyledTableCell>
                     <Grid container spacing={1}>
                       {row.events.map((v, k) => (
                         <Chip
+                          size="small"
                           key={k}
                           label={v.name}
                           color="primary"
@@ -241,10 +275,10 @@ export default function AdminHome() {
                     </Grid>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <Stack container direction="row" spacing={1}>
+                    <Grid container direction="row" spacing={1}>
                       <IconButton
                         aria-label="delete"
-                        onClick={() => handleDelete(row)}
+                        onClick={() => openConfirm(row)}
                       >
                         <DeleteIcon color="error" />
                       </IconButton>
@@ -252,9 +286,19 @@ export default function AdminHome() {
                         aria-label="edit"
                         onClick={() => handleEdit(row)}
                       >
-                        <EditIcon color="primary" />
+                        <EditIcon color="secondary" />
                       </IconButton>
-                    </Stack>
+                      {row?.package_booked ? (
+                        <Button
+                          size="small"
+                          onClick={() => handleBook(null, row)}
+                        >
+                          Cancel Booking
+                        </Button>
+                      ) : (
+                        <PackageBook bookPackage={(p) => handleBook(p, row)} />
+                      )}
+                    </Grid>
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -262,31 +306,11 @@ export default function AdminHome() {
           </Table>
         </TableContainer>
       </Grid>
-      <Dialog
+      <ConfirmModel
         open={open}
-        onClose={handleModelClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Are you sure to delete this client?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Please note that once you delete the client, Client no further able
-            to access the invitation and gallary screen, but gallary images will
-            be keep in storage
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button color="info" onClick={handleModelClose}>
-            Cancel
-          </Button>
-          <Button color="error" onClick={handleDelete} autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+        handleDelete={handleDelete}
+        handleModelClose={handleModelClose}
+      />
       {loading && <Loader />}
     </div>
   );

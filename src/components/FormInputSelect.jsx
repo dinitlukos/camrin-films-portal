@@ -9,7 +9,10 @@ export const FormInputSelect = ({
   label,
   inputRef,
   message,
+  disabled,
+  handleOnChange,
   size = "small",
+  variant = "value",
   placeholder = "",
   options = [],
   containerSize = { xs: 12, md: 6 },
@@ -30,8 +33,12 @@ export const FormInputSelect = ({
         <FormGrid size={containerSize}>
           <TextField
             select
+            disabled={disabled}
             size={size}
-            onChange={onChange}
+            onChange={(e) => {
+              onChange(e);
+              if (handleOnChange) handleOnChange(e.target.value);
+            }}
             label={label}
             placeholder={placeholder}
             error={!!error}
@@ -39,8 +46,11 @@ export const FormInputSelect = ({
             inputRef={inputRef}
           >
             {options.map((d) => (
-              <MenuItem key={d} value={d}>
-                {d}
+              <MenuItem
+                key={variant == "id" ? d?.id : d}
+                value={variant == "id" ? d?.id : d}
+              >
+                {variant == "id" ? d?.label : d}
               </MenuItem>
             ))}
           </TextField>

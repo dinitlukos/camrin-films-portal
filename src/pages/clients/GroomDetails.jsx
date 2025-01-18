@@ -9,8 +9,8 @@ import { communities } from "../../constants/communities";
 const GroomDetails = ({ control, register }) => {
   return (
     <Grid>
-      <Grid container spacing={3} marginBottom="12px">
-        <Typography fontWeight="bold">Groom Details</Typography>
+      <Grid container spacing={3} marginBottom="24px">
+        <Typography fontWeight="bold" color="primary">Groom Details</Typography>
       </Grid>
       <Grid container spacing={3}>
         <FormInputText
@@ -18,7 +18,7 @@ const GroomDetails = ({ control, register }) => {
           control={control}
           label="Groom Name"
           containerSize={{ xs: 12, md: 4 }}
-          inputRef={{ ...register("groom_name", { required: true }) }}
+          inputRef={{ ...register("groom_name") }}
         />
         <FormInputSelect
           name="groom_location"
@@ -27,7 +27,7 @@ const GroomDetails = ({ control, register }) => {
           placeholder="Groom Location"
           label="Groom Location"
           containerSize={{ xs: 12, md: 4 }}
-          inputRef={{ ...register("groom_location", { required: true }) }}
+          inputRef={{ ...register("groom_location") }}
         />
         <FormInputSelect
           name="groom_community"
@@ -36,14 +36,14 @@ const GroomDetails = ({ control, register }) => {
           placeholder="Groom Community"
           label="Groom Community"
           containerSize={{ xs: 12, md: 4 }}
-          inputRef={{ ...register("groom_community", { required: true }) }}
+          inputRef={{ ...register("groom_community") }}
         />
         <FormInputText
           name="groom_father_name"
           control={control}
           label="Groom Father Name"
           inputRef={{
-            ...register("groom_father_name", { required: true }),
+            ...register("groom_father_name"),
           }}
         />
         <FormInputText
@@ -51,7 +51,7 @@ const GroomDetails = ({ control, register }) => {
           control={control}
           label="Groom Mother Name"
           inputRef={{
-            ...register("groom_mother_name", { required: true }),
+            ...register("groom_mother_name"),
           }}
         />
       </Grid>
