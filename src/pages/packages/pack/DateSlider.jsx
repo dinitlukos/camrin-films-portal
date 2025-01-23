@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid2";
-import calendarImage from "../../../assets/calendar_primary.png";
+import calendarImage from "assets/calendar_primary.png";
 import Slider from "react-slick";
 import moment from 'moment'
 import React from 'react'

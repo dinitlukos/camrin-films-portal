@@ -1,5 +1,5 @@
 import "./Loader.css";
-import circle from "../assets/packages/cf_circle.png";
+import circle from "assets/packages/cf_circle.png";
 
 const Loader = () => {
   return (

@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-const CFAppBar = ({title,handleLogout}) => {
+const CFAppBar = ({title,handleLogout, enableBack=true, appBarRef }) => {
     const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -28,9 +28,9 @@ const CFAppBar = ({title,handleLogout}) => {
       };
     
 
-    return <AppBar position="static">
+    return <AppBar position="static" ref={appBarRef}>
     <Toolbar>
-      <IconButton
+      {enableBack && <IconButton
         size="large"
         edge="start"
         color="inherit"
@@ -39,7 +39,7 @@ const CFAppBar = ({title,handleLogout}) => {
         onClick={handleBack}
       >
         <MenuIcon />
-      </IconButton>
+      </IconButton>}
       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
         {title}
       </Typography>

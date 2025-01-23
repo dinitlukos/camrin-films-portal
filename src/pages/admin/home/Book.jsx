@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
-import { package_variants } from "../../../constants/packages";
+import { package_variants } from "constants/packages";
 
 const options = package_variants;
 

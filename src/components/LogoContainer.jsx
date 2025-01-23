@@ -1,7 +1,7 @@
 import Grid from '@mui/material/Grid2'
 
-import circle from "../assets/packages/cf_circle_primary.png";
-import logo from "../assets/packages/cf_logo.png";
+import circle from "assets/packages/cf_circle_primary.png";
+import logo from "assets/packages/cf_logo.png";
 const LogoContainer = () => {
     return <Grid
     container

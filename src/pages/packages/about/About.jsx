@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid2";
 import SocialMedia from "./SocialMedia";
-import Spiral from "../../../assets/packages/spiral.svg"
+import Spiral from "assets/packages/spiral.svg"
 import {
   Chip,
   Divider,

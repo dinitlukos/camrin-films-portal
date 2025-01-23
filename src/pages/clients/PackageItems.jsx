@@ -10,7 +10,7 @@ import {
 import Grid from "@mui/material/Grid2";
 import _ from "lodash";
 import React from "react";
-import EditableList from "../../components/EditableList";
+import EditableList from "components/EditableList";
 
 const PackageItems = ({
   variant,

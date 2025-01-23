@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Images } from "../constants/images";
+import { Images } from "constants/images";
 
 const AddOnTile = ({ addOn }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);

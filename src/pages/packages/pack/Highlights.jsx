@@ -1,9 +1,9 @@
 import Grid from "@mui/material/Grid2";
-import circle from "../../../assets/packages/cf_circle_primary.png";
+import circle from "assets/packages/cf_circle_primary.png";
 
 import { alpha, Typography, useTheme } from "@mui/material";
 import { Wave } from "react-animated-text";
-import { heighlights } from "../../../constants/highlights";
+import { heighlights } from "constants/highlights";
 
 const Highlights = () => {
   const theme = useTheme();

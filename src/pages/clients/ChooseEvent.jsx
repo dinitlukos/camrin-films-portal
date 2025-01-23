@@ -2,8 +2,8 @@ import Grid from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import { doc, getDoc } from "firebase/firestore";
 import React from "react";
-import img2 from "../../assets/home/roal.jpg";
-import { db } from "../../firebase";
+import img2 from "assets/home/roal.jpg";
+import { db } from "src/firebase";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";

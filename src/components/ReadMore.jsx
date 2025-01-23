@@ -8,7 +8,6 @@ const ReadMore = ({ children }) => {
     const toggleReadMore = () => {
         setIsReadMore(!isReadMore);
     };
-    console.log(text)
     return (
         <p className="text">
             {isReadMore ? text.slice(0, 300) : text}

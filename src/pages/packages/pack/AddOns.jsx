@@ -2,8 +2,8 @@ import { useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import AddOnTile from "../../../components/AddOnTile";
-import { addons } from "../../../constants/addons";
+import AddOnTile from "components/AddOnTile";
+import { addons } from "constants/addons";
 
 const AddOns = () => {
   const theme = useTheme();

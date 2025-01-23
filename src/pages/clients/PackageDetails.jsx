@@ -4,10 +4,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import React from "react";
-import FormGrid from "../../components/FormGrid";
-import { FormInputMultiSelect } from "../../components/FormInputMultiSelect";
-import { FormInputSelect } from "../../components/FormInputSelect";
-import { package_modes, package_variants } from "../../constants/packages";
+import FormGrid from "components/FormGrid";
+import { FormInputMultiSelect } from "components/FormInputMultiSelect";
+import { FormInputSelect } from "components/FormInputSelect";
+import { package_modes, package_variants } from "constants/packages";
 import PackageItems from "./PackageItems";
 
 const PackageDetails = ({

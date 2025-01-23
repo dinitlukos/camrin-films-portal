@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid2";
-import logo from "../assets/logo.png";
+import logo from "assets/logo.png";
 const Watermark = ({size}) => {
   return (
     <Grid

@@ -11,10 +11,10 @@ import {
 import Grid from "@mui/material/Grid2";
 import React from "react";
 import Deliverables from "./Deliverables";
-import logo from "../../../assets/watermark.png";
+import logo from "assets/watermark.png";
 import PaymentTerms from "./PaymentTerms";
 import _ from "lodash";
-import { clone } from "../../../shared/StringUtils";
+import { clone } from "src/shared/StringUtils";
 
 const PackageType = ({ pack, variant = "golden", events, size }) => {
   const theme = useTheme();

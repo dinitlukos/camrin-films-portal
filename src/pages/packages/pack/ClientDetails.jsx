@@ -3,12 +3,12 @@ import Grid from "@mui/material/Grid2";
 import _ from "lodash";
 import moment from "moment";
 import React from "react";
-import calendarImage from "../../../assets/calendar_primary.png";
-import spiral from "../../../assets/packages/spiral.svg";
-import spiralSecondary from "../../../assets/packages/spiral_secondary.svg";
-import AvatarListItem from "../../../components/AvatarListItem";
+import calendarImage from "assets/calendar_primary.png";
+import spiral from "assets/packages/spiral.svg";
+import spiralSecondary from "assets/packages/spiral_secondary.svg";
+import AvatarListItem from "components/AvatarListItem";
 
-import { package_mode_label } from "../../../constants/packages";
+import { package_mode_label } from "constants/packages";
 
 const ClientDetails = ({ data }) => {
   const theme = useTheme();

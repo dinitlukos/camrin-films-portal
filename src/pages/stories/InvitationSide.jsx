@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { db } from "../../firebase";
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import "./StoryPage.css";
-import moment from "moment";
-import logo from "../../assets/logo.png";
-import calendarImage from "../../assets/stories/calendar.png";
-import invitationBg from "../../assets/stories/invitation_bg.jpg";
-import invitationBgTop from "../../assets/stories/invitation_bg_top.png";
-import invitationBgBottom from "../../assets/stories/invitation_bg_bottom.png";
-import WishesModal from "../WishesModal";
-import Loader from "../Loader";
-import { FaLocationArrow } from "react-icons/fa";
-import WishIcon from "../../components/WishIcon";
-import LogoContainer from "../../components/LogoContainer";
-import CoverPhoto from "./CoverPhoto";
-import Grid from "@mui/material/Grid2";
-import zIndex from "@mui/material/styles/zIndex";
 import { useTheme } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import moment from "moment";
+import React from "react";
+import { FaLocationArrow } from "react-icons/fa";
+import calendarImage from "assets/calendar_primary.png";
+import invitationBgBottom from "assets/stories/invitation_bg_bottom.png";
+import invitationBgTop from "assets/stories/invitation_bg_top.png";
+import "./StoryPage.css";
 
 const InvitationSide = ({ story, days, date }) => {
   const theme = useTheme();

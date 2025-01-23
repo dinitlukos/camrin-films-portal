@@ -1,8 +1,8 @@
 import { colors } from "@mui/material";
-import weddingChronicles from "../assets/highlights/wedding_chronicles.jpeg";
-import weddingMagazine from "../assets/highlights/wedding_magazine.jpeg";
-import weddingDocumentary from "../assets/highlights/wedding_documentary.jpeg";
-import memoryBox from "../assets/highlights/memory_box.jpeg";
+import weddingChronicles from "assets/highlights/wedding_chronicles.jpeg";
+import weddingMagazine from "assets/highlights/wedding_magazine.jpeg";
+import weddingDocumentary from "assets/highlights/wedding_documentary.jpeg";
+import memoryBox from "assets/highlights/memory_box.jpeg";
 
 
 

@@ -3,8 +3,8 @@ import { FormHelperText, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
 import React from "react";
-import FormGrid from "../../components/FormGrid";
-import { FormInputText } from "../../components/FormInputText";
+import FormGrid from "components/FormGrid";
+import { FormInputText } from "components/FormInputText";
 
 const DirectionAndCover = ({control, register, coverPhoto, setCoverPhoto}) => {
 

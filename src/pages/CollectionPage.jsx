@@ -5,7 +5,7 @@ import "react-photo-album/rows.css";
 import { SlArrowDown } from "react-icons/sl";
 import "./CollectionPage.css";
 import _ from "lodash";
-import logo from "../assets/logo.png";
+import logo from "assets/logo.png";
 
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -21,7 +21,7 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Download from "yet-another-react-lightbox/plugins/download";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
-import { db } from "../firebase";
+import { db } from "src/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Loader from "./Loader";
 import { Typography } from "@mui/material";

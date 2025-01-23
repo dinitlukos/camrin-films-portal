@@ -8,7 +8,7 @@ import { useTheme } from "@mui/material";
 import {
   service_failure,
   terms_service_cancellation,
-} from "../../../constants/constants";
+} from "constants/constants";
 import { useState } from "react";
 const ServiceFailure = () => {
   const theme = useTheme();

@@ -11,7 +11,7 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
-import { terms_service_cancellation } from "../../../constants/constants";
+import { terms_service_cancellation } from "constants/constants";
 import StarIcon from "@mui/icons-material/Star";
 import { useState } from "react";
 

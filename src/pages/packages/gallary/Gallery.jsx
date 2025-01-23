@@ -8,7 +8,7 @@ import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
-import { GallaryImages } from "../../../constants/gallaryImages";
+import { GallaryImages } from "constants/gallaryImages";
 
 const breakpoints = [1080, 640, 384, 256, 128, 96, 64, 48];
 

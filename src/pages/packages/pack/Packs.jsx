@@ -1,28 +1,32 @@
-import Grid from "@mui/material/Grid2";
-import { doc, getDoc } from "firebase/firestore";
-import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import { db } from "../../../firebase";
-import Loader from "../../Loader";
+import Grid from '@mui/material/Grid2';
+import { doc, getDoc } from 'firebase/firestore';
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { db } from 'src/firebase';
+import Loader from '../../Loader';
 
-import { DownloadOutlined } from "@mui/icons-material";
-import { IconButton, Typography } from "@mui/material";
-import { useReactToPrint } from "react-to-print";
-import ClientDetails from "./ClientDetails";
-import PackageType from "./PackageType";
-import ServiceFailure from "./ServiceFailure";
-import Terms from "./Terms";
-import ImportantNotes from "./ImportantNotes";
-import AddOns from "./Addons";
-import Payment from "./Payment";
-import Watermark from "../../../components/Watermark";
-import DateSlider from "./DateSlider";
-import Highlights from "./Highlights";
-import { package_variants } from "../../../constants/packages";
-import { clone } from "../../../shared/StringUtils";
+import { Construction, DownloadOutlined } from '@mui/icons-material';
+import { alpha, IconButton, Typography, useTheme } from '@mui/material';
+import { useReactToPrint } from 'react-to-print';
+import ClientDetails from './ClientDetails';
+import PackageType from './PackageType';
+import ServiceFailure from './ServiceFailure';
+import Terms from './Terms';
+import ImportantNotes from './ImportantNotes';
+import AddOns from './Addons';
+import Payment from './Payment';
+import DateSlider from './DateSlider';
+import Highlights from './Highlights';
+import { package_variants } from 'constants/packages';
+import { clone } from 'src/shared/StringUtils';
+import PackageTypeAccordion from './PackageTypeAccordion';
+
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const Packs = ({ printRef }) => {
-  const [loading, setLoading] = React.useState(0);
+  const theme = useTheme();
+  const [loading, setLoading] = useState(true);
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -37,14 +41,14 @@ const Packs = ({ printRef }) => {
   const fetchStoryData = async (sId) => {
     setLoading(true);
     try {
-      const docSnap = await getDoc(doc(db, "stories", sId));
+      const docSnap = await getDoc(doc(db, 'stories', sId));
       if (docSnap.exists()) {
         setData(docSnap.data());
       } else {
         // navigate("/", { replace: true });
       }
     } catch (error) {
-      console.error("Error fetching story data:", error);
+      console.error('Error fetching story data:', error);
       setData(null);
     } finally {
       setLoading(false);
@@ -72,17 +76,25 @@ const Packs = ({ printRef }) => {
         alignItems="center"
         justifyContent="center"
         direction="column"
-        style={{
-          background: "linear-gradient(180deg, #841042 0%, #CD3339 100%)",
-          height: "300px",
-          borderRadius: 25,
-          color: "#fff",
+        sx={{
+          height: '60vh',
         }}
       >
-        <Typography>
-          Thanks for the patience! We are working on your package.
-        </Typography>
-        <Typography>We will get back to you soon...</Typography>
+        <Grid
+          alignItems="center"
+          container
+          direction="column"
+          sx={{ background: alpha('#fff', 0.8), p: 5, borderRadius: 5 }}
+        >
+          <Construction
+            color="primary"
+            sx={{ height: '100px', width: '100px' }}
+          />
+          <Typography variant="h6">
+            Thanks for the patience! We are working on your packages.
+          </Typography>
+          <Typography>We will get back to you soon...</Typography>
+        </Grid>
       </Grid>
     );
   }
@@ -150,10 +162,10 @@ const Packs = ({ printRef }) => {
       <IconButton
         aria-label="delete"
         style={{
-          position: "absolute",
+          position: 'absolute',
           right: 20,
           top: 20,
-          color: "#000",
+          color: '#000',
         }}
         onClick={handlePrint}
       >

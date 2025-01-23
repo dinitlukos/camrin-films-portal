@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import upi from "../../../assets/packages/upi.png";
+import upi from "assets/packages/upi.png";
 
 const Payment = () => {
   const theme = useTheme();

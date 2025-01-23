@@ -11,7 +11,7 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
-import { important_notes } from "../../../constants/constants";
+import { important_notes } from "constants/constants";
 import StarIcon from "@mui/icons-material/Star";
 import { useState } from "react";
 

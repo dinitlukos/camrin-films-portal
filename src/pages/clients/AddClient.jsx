@@ -1,29 +1,23 @@
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MenuIcon from "@mui/icons-material/ArrowBack";
-import { Divider, Typography } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
+import { Divider } from "@mui/material";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Toolbar from "@mui/material/Toolbar";
 import { Box } from "@mui/system";
 import dayjs from "dayjs";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import _ from "lodash";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../auth/AuthProvider";
-import ErrorSnackBar from "../../components/ErrorSnackBar";
-import FormGrid from "../../components/FormGrid";
-import { all_events, event_default_values } from "../../constants/events";
-import { package_variants } from "../../constants/packages";
-import { db } from "../../firebase";
-import composePaymentTerms from "../../shared/payment";
-import { clone, generateUId } from "../../shared/StringUtils";
+import { AuthContext } from "src/auth/AuthProvider";
+import CFAppBar from "components/CFAppBar";
+import ErrorSnackBar from "components/ErrorSnackBar";
+import FormGrid from "components/FormGrid";
+import { all_events, event_default_values } from "constants/events";
+import { package_variants } from "constants/packages";
+import { db } from "src/firebase";
+import composePaymentTerms from "src/shared/payment";
+import { clone, generateUId } from "src/shared/StringUtils";
 import Loader from "../Loader";
 import BrideDetails from "./BrideDetails";
 import ClientEvents from "./ClientEvents";
@@ -32,7 +26,6 @@ import DirectionAndCover from "./DirectionAndCover";
 import GroomDetails from "./GroomDetails";
 import PackageDetails from "./PackageDetails";
 import WeddingDetails from "./WeddingDetails";
-import CFAppBar from "../../components/CFAppBar";
 
 export default function AddressForm() {
   const [eventDate, setEventDate] = useState(dayjs(moment()));
@@ -66,7 +59,6 @@ export default function AddressForm() {
         const docSnap = await getDoc(doc(db, "stories", uId));
         if (docSnap.exists()) {
           const d = docSnap.data();
-          // console.log(d)
           setDates(d);
           const ev = _.map(clone(all_events["duel"]), (e) => {
             const cp = _.find(docSnap.data()["events"], { name: e.name });
@@ -92,7 +84,7 @@ export default function AddressForm() {
       // await updateProperties("packages", p)
 
       // })
-      if (packages.length <= 0) {
+      if (pcks.length <= 0) {
         const defPacks = await getProperties("packages");
         setDefaultPackages(defPacks);
         pcks = defPacks["duel"];
@@ -128,9 +120,7 @@ export default function AddressForm() {
       ).toLowerCase();
       const evs = clone(events);
       var ev = await refactorEvents(newUId, evs);
-      console.log(packages);
       var pcks = await composePackage(ev, data);
-      console.log(pcks);
       if (!customer_contact) delete data["customer_contact"];
       if (!customer_email) delete data["customer_email"];
       data["uid"] = newUId;
@@ -144,10 +134,12 @@ export default function AddressForm() {
         data["cover_photo"] = url;
       }
       if (docSnap.exists()) {
+        data["status"] = "Package Updated"
         await updateDoc(docId, data);
         const existingEvents = docSnap.data()?.events;
         ev = _.difference(ev, existingEvents);
       } else {
+        data["status"] = "Package Created"
         await setDoc(docId, data);
       }
       createStorage(newUId, ev);

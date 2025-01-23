@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AdminHome from './pages/admin/home/AdminHome';
 import AddClient from './pages/clients/AddClient';
@@ -12,6 +12,10 @@ import PrivateRoute from './auth/PrivateRoute';
 import AdminLogin from './pages/AdminLogin';
 import PackagePage from './pages/packages/Index';
 import StoryPage from './pages/stories/StoryPage';
+import AdminClientNotes from './pages/admin/notes/AdminClientNotes';
+import OpenWhatsApp from './pages/OpenWhatsApp';
+import favIcon from "assets/logo.jpg"
+
 
 const theme = createTheme({
   palette: {
@@ -31,6 +35,11 @@ const theme = createTheme({
   },
 });
 const App = () => {
+
+  useEffect(()=>{
+    const favicon = document.getElementById("favicon");
+    favicon.href = favIcon
+  },[])
   return (
     // <React.StrictMode>
     // <RouterProvider router={router}/>
@@ -44,11 +53,20 @@ const App = () => {
             <Route path="/packages/:storyId" element={<PackagePage />} />
             <Route path="/admin/client" element={<AddClient />} />
             <Route path="/login" element={<AdminLogin />} />
+            <Route path="/chatus" element={<OpenWhatsApp />} />
             <Route
               path="/admin"
               element={
                 <PrivateRoute>
                   <AdminHome />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/client/notes"
+              element={
+                <PrivateRoute>
+                  <AdminClientNotes />
                 </PrivateRoute>
               }
             />

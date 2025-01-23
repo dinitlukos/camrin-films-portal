@@ -3,12 +3,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid2";
-import { AuthContext } from "../auth/AuthProvider";
+import { AuthContext } from "src/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import { FormHelperText } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { FormInputText } from "../components/FormInputText";
+import { FormInputText } from "components/FormInputText";
 
 export default function AdminLogin(props) {
   const [error, setError] = React.useState(false);

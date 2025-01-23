@@ -4,8 +4,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import React from "react";
-import FormGrid from "../../components/FormGrid";
-import { FormInputText } from "../../components/FormInputText";
+import FormGrid from "components/FormGrid";
+import { FormInputText } from "components/FormInputText";
+import { FormInputPhone } from "components/FormInputPhone";
+import 'react-phone-input-2/lib/material.css'
 
 const WeddingDetails = ({ control, register, eventDate, setEventDate }) => {
   return (
@@ -16,7 +18,7 @@ const WeddingDetails = ({ control, register, eventDate, setEventDate }) => {
         </Typography>
       </Grid>
       <Grid container spacing={3}>
-        <FormInputText
+        {/* <FormInputText
           name="customer_contact"
           control={control}
           label="Contact Number"
@@ -26,6 +28,28 @@ const WeddingDetails = ({ control, register, eventDate, setEventDate }) => {
               if (value) {
                 return !!value.match(
                   /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/g
+                );
+              } else if (formValue.customer_email) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+          }}
+          inputRef={{
+            ...register("customer_contact"),
+          }}
+        /> */}
+        <FormInputPhone
+          name="customer_contact"
+          control={control}
+          label="Contact Number"
+          message="Either a valid Phone number or Email is required"
+          rules={{
+            validate: (value, formValue) => {
+              if (value) {
+                return !!value.match(
+                  /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,8}$/g
                 );
               } else if (formValue.customer_email) {
                 return true;

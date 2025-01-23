@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import "./HomePage.css";
-import logo from "../assets/logo.png";
-import whatsappimage from "../assets/whatsapp.webp";
-import img1 from "../assets/home/wedding4.png";
-import img2 from "../assets/home/roal.jpg";
-import homeBg from "../assets/home/home-bg.webp";
+import whatsappimage from "assets/whatsapp.webp";
+import img1 from "assets/home/wedding4.png";
+import img2 from "assets/home/roal.jpg";
+import homeBg from "assets/bg_doodle.png";
 import {
   FaFacebook,
   FaTwitter,

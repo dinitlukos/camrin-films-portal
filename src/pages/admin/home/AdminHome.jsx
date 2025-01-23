@@ -1,93 +1,41 @@
-import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import Grid from "@mui/material/Grid2";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import _, { update } from "lodash";
-import { styled } from "@mui/material/styles";
+import Grid from '@mui/material/Grid2';
+import { styled } from '@mui/material/styles';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
 
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
-
+import { Button, useTheme } from '@mui/material';
 import {
   collection,
-  doc,
   deleteDoc,
+  doc,
   getDocs,
   updateDoc,
-} from "firebase/firestore";
-import { db } from "../../../firebase";
-import {
-  Button,
-  Chip,
-  colors,
-  IconButton,
-  Link,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import moment from "moment";
-import { AuthContext } from "../../../auth/AuthProvider";
-import Loader from "../../Loader";
-import PackageBook from "./Book";
-import ConfirmModel from "./ConfirmModel";
+} from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from 'src/auth/AuthProvider';
+import CFAppBar from 'components/CFAppBar';
+import { db } from 'src/firebase';
+import Loader from '../../Loader';
+import ClientTable from './ClientTable';
+import ConfirmModel from './ConfirmModel';
+import { ToastContainer } from 'react-toastify';
 
 const COL_KEYS = [
-  "id",
-  "bride_name",
-  "groom_name",
-  "wedding_date",
-  "package_booked",
-  "uid",
-  "events",
+  'id',
+  'bride_name',
+  'groom_name',
+  'wedding_date',
+  'package_booked',
+  'packages',
+  'uid',
+  'events',
+  'customer_contact',
+  'customer_email',
+  'status'
 ];
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
-function createData(
-  id,
-  bride_name,
-  groom_name,
-  wedding_date,
-  guest_contact,
-  events
-) {
-  return { id, bride_name, groom_name, wedding_date, guest_contact, events };
-}
 
 export default function AdminHome() {
   const navigate = useNavigate();
@@ -100,14 +48,14 @@ export default function AdminHome() {
   const [open, setOpen] = useState(false);
 
   const fetchStories = async () => {
-    const docSnap = await getDocs(collection(db, "stories"));
+    const docSnap = await getDocs(collection(db, 'stories'));
     if (docSnap.docs.length > 0) {
       const data = _.map(docSnap?.docs, (v) => {
         return _.pick({ ...v.data(), id: v.id }, COL_KEYS);
       });
       setRows(data);
     } else {
-      navigate("/", { replace: true });
+      navigate('/', { replace: true });
     }
   };
 
@@ -116,17 +64,22 @@ export default function AdminHome() {
   }, []);
 
   const handleEdit = (d) => {
-    navigate("/admin/client", { state: { id: d.id } });
-  };
-  const handleAddClient = () => {
-    navigate("/admin/client");
+    navigate('/admin/client', { state: { id: d.id } });
   };
 
-  const handleDelete = async (row) => {
+  const handleAddClient = () => {
+    navigate('/admin/client');
+  };
+
+  const handleNotes = (d) => {
+    navigate('/admin/client/notes', { state: { id: d.id } });
+  };
+
+  const handleDelete = async () => {
     try {
       handleModelClose();
       setLoading(true);
-      await deleteDoc(doc(db, "stories", selectedRow?.id));
+      await deleteDoc(doc(db, 'stories', selectedRow?.id));
       await fetchStories();
       setSelectedRow(null);
       setLoading(false);
@@ -137,10 +90,10 @@ export default function AdminHome() {
     }
   };
 
-  const handleBook = async (pack, row) => {
+  const handleBook = async (row, d) => {
     try {
       setLoading(true);
-      await updateDoc(doc(db, "stories", row?.id), { package_booked: pack });
+      await updateDoc(doc(db, 'stories', row?.id), d);
       await fetchStories();
       setLoading(false);
     } catch (err) {
@@ -176,57 +129,34 @@ export default function AdminHome() {
   };
 
   const handleNavigation = (uid) => {
-    const url = location.origin + "/packages/" + uid;
-    window.open(url, "_blank").focus();
+    const url = location.origin + '/packages/' + uid;
+    window.open(url, '_blank').focus();
   };
 
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Admin Home
-          </Typography>
-          <div>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
-          </div>
-        </Toolbar>
-      </AppBar>
+      <CFAppBar
+        title="Admin Home"
+        handleLogout={handleLogout}
+        enableBack={false}
+      />
       <Grid container spacing={3} justifyContent="end">
         <Grid container spacing={3} paddingRight={6} paddingTop={4}>
-          <Button variant="outlined" onClick={handleAddClient}>
+          <Button variant="contained" color='secondary' onClick={handleAddClient}>
             Add Client
           </Button>
         </Grid>
       </Grid>
       <Grid padding={3}>
-        <TableContainer component={Paper}>
+        <ClientTable
+          data={rows}
+          loading={loading}
+          openConfirm={openConfirm}
+          handleEdit={handleEdit}
+          handleBook={handleBook}
+          handleNotes={handleNotes}
+        />
+        {/* <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
               <TableRow>
@@ -304,13 +234,14 @@ export default function AdminHome() {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer> */}
       </Grid>
       <ConfirmModel
         open={open}
         handleDelete={handleDelete}
         handleModelClose={handleModelClose}
       />
+      <ToastContainer position="bottom-center"/>
       {loading && <Loader />}
     </div>
   );
