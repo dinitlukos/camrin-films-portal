@@ -33,7 +33,8 @@ const COL_KEYS = [
   'events',
   'customer_contact',
   'customer_email',
-  'status'
+  'status',
+  'disable_whatsapp'
 ];
 
 
@@ -90,7 +91,7 @@ export default function AdminHome() {
     }
   };
 
-  const handleBook = async (row, d) => {
+  const handleDataUpdate = async (row, d) => {
     try {
       setLoading(true);
       await updateDoc(doc(db, 'stories', row?.id), d);
@@ -153,7 +154,7 @@ export default function AdminHome() {
           loading={loading}
           openConfirm={openConfirm}
           handleEdit={handleEdit}
-          handleBook={handleBook}
+          handleDataUpdate={handleDataUpdate}
           handleNotes={handleNotes}
         />
         {/* <TableContainer component={Paper}>
@@ -221,12 +222,12 @@ export default function AdminHome() {
                       {row?.package_booked ? (
                         <Button
                           size="small"
-                          onClick={() => handleBook(null, row)}
+                          onClick={() => handleDataUpdate(null, row)}
                         >
                           Cancel Booking
                         </Button>
                       ) : (
-                        <PackageBook bookPackage={(p) => handleBook(p, row)} />
+                        <PackageBook bookPackage={(p) => handleDataUpdate(p, row)} />
                       )}
                     </Grid>
                   </StyledTableCell>

@@ -50,7 +50,7 @@ const ClientTable = ({
   loading,
   openConfirm,
   handleEdit,
-  handleBook,
+  handleDataUpdate,
   handleNotes,
 }) => {
   const locations = useLocation();
@@ -166,8 +166,9 @@ const ClientTable = ({
               <Button
                 size="small"
                 variant="outlined"
+                disabled={params.row?.disable_whatsapp}
                 color="success"
-                startIcon={<Share color="success" />}
+                startIcon={<Share color={params.row?.disable_whatsapp ? "disabled": "success"} />}
                 onClick={() => handleShare(params.row)}
               >
                 Share
@@ -201,7 +202,7 @@ const ClientTable = ({
                 <Button
                   size="small"
                   onClick={() =>
-                    handleBook(params.row, { package_booked: null })
+                    handleDataUpdate(params.row, { package_booked: null })
                   }
                 >
                   Cancel
@@ -209,7 +210,7 @@ const ClientTable = ({
               ) : (
                 <PackageBook
                   bookPackage={(p) =>
-                    handleBook(params.row, { package_booked: p })
+                    handleDataUpdate(params.row, { package_booked: p })
                   }
                 />
               )}
@@ -255,21 +256,21 @@ const ClientTable = ({
             {/* {params.row?.package_booked ? (
               <Button
                 size="small"
-                onClick={() => handleBook(params.row, { package_booked: null })}
+                onClick={() => handleDataUpdate(params.row, { package_booked: null })}
               >
                 Cancel Booking
               </Button>
             ) : (
               <PackageBook
                 bookPackage={(p) =>
-                  handleBook(params.row, { package_booked: p })
+                  handleDataUpdate(params.row, { package_booked: p })
                 }
               />
             )} */}
             <MoreActions
               row={params.row}
               openConfirm={openConfirm}
-              handleBook={handleBook}
+              handleDataUpdate={handleDataUpdate}
               handleNotes={handleNotes}
             />
           </Grid>
@@ -295,8 +296,7 @@ const ClientTable = ({
     try {
       if (row?.customer_contact) {
         const res = await sendWhatsappMessage(row?.customer_contact, row?.id);
-        console.log(res);
-        handleBook(row, { status: 'Package Sent' });
+        handleDataUpdate(row, { status: 'Package Sent', disable_whatsapp: false });
         toast.success('Message sent successfully');
       } else {
         toast.error('Invalid phone number to send message');

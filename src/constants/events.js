@@ -579,8 +579,8 @@ const single_events = [
     ],
   },
   {
-    name: 'Dekahina',
-    id: 'single_dekahina',
+    name: 'Dekshina',
+    id: 'single_dekshina',
     status: false,
     image: null,
     services: [
@@ -1395,8 +1395,8 @@ const duel_events = [
     ],
   },
   {
-    name: 'Dekahina',
-    id: 'single_dekahina',
+    name: 'Dekshina',
+    id: 'single_dekshina',
     status: false,
     image: null,
     services: [
@@ -1630,6 +1630,26 @@ export const all_events = {
   single: single_events,
   duel: duel_events,
 };
+
+export const events_order = [
+  'Fixation',
+  'Save the Date',
+  'Bridal Shower',
+  'Chantham Charth',
+  'Haldi',
+  'Mehandi',
+  'Sangeeth',
+  'Temple Shoot',
+  'Pre Wedding Reception',
+  'Dekshina',
+  'Engagement',
+  'Wedding',
+  'Wedding Eve (Groom)',
+  'Wedding Eve (Bride)',
+  'Reception (Bride)',
+  'Reception (Groom)',
+  'Post Wedding',
+];
 export const event_default_values = {
   groom_name: '',
   groom_father_name: '',
@@ -1648,4 +1668,5 @@ export const event_default_values = {
   wedding_direction: '',
   package_type: 'duel',
   package_suggestions: package_variants,
+  disable_whatsapp: false,
 };

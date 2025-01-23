@@ -1,54 +1,56 @@
-import { Divider } from "@mui/material";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid2";
-import { Box } from "@mui/system";
-import dayjs from "dayjs";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import _ from "lodash";
-import moment from "moment";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "src/auth/AuthProvider";
-import CFAppBar from "components/CFAppBar";
-import ErrorSnackBar from "components/ErrorSnackBar";
-import FormGrid from "components/FormGrid";
-import { all_events, event_default_values } from "constants/events";
-import { package_variants } from "constants/packages";
-import { db } from "src/firebase";
-import composePaymentTerms from "src/shared/payment";
-import { clone, generateUId } from "src/shared/StringUtils";
-import Loader from "../Loader";
-import BrideDetails from "./BrideDetails";
-import ClientEvents from "./ClientEvents";
-import { createStorage, getProperties, uploadFile } from "./ClientService";
-import DirectionAndCover from "./DirectionAndCover";
-import GroomDetails from "./GroomDetails";
-import PackageDetails from "./PackageDetails";
-import WeddingDetails from "./WeddingDetails";
+import { Divider } from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid2';
+import { Box } from '@mui/system';
+import dayjs from 'dayjs';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import _ from 'lodash';
+import moment from 'moment';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from 'src/auth/AuthProvider';
+import CFAppBar from 'components/CFAppBar';
+import ErrorSnackBar from 'components/ErrorSnackBar';
+import FormGrid from 'components/FormGrid';
+import { all_events, event_default_values } from 'constants/events';
+import { package_variants } from 'constants/packages';
+import { db } from 'src/firebase';
+import composePaymentTerms from 'src/shared/payment';
+import { clone, generateUId } from 'src/shared/StringUtils';
+import Loader from '../Loader';
+import BrideDetails from './BrideDetails';
+import ClientEvents from './ClientEvents';
+import { createStorage, getProperties, uploadFile } from './ClientService';
+import DirectionAndCover from './DirectionAndCover';
+import GroomDetails from './GroomDetails';
+import PackageDetails from './PackageDetails';
+import WeddingDetails from './WeddingDetails';
+import { events_order } from '../../constants/events';
+import { sort } from '../../shared/ObjectUtils';
 
 export default function AddressForm() {
   const [eventDate, setEventDate] = useState(dayjs(moment()));
   const [quotationDate, setQuotationDate] = useState(dayjs(moment()));
   const [quotationValidity, setQuotationValidity] = useState(
-    dayjs(moment().add(1, "M"))
+    dayjs(moment().add(1, 'M'))
   );
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const [coverPhoto, setCoverPhoto] = useState("");
+  const [coverPhoto, setCoverPhoto] = useState('');
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [errMessage, setErrMessage] = useState();
   const location = useLocation();
   const navigate = useNavigate();
   const { logOut } = React.useContext(AuthContext);
-  const [events, setEvents] = useState(clone(all_events["duel"]));
+  const [events, setEvents] = useState(clone(all_events['duel']));
   const [packages, setPackages] = useState([]);
   const [packageBooked, setPackageBooked] = useState();
   const [defaultPackages, setDefaultPackages] = useState([]);
-  const [packageType, setPackageType] = useState("duel");
+  const [packageType, setPackageType] = useState('duel');
   const [defaultEvents, setDefaultEvents] = useState([]);
 
-  const uId = location.state?.id
+  const uId = location.state?.id;
 
   const fetchUserData = async () => {
     try {
@@ -56,21 +58,23 @@ export default function AddressForm() {
       var pcks = [];
       setLoading(true);
       if (uId) {
-        const docSnap = await getDoc(doc(db, "stories", uId));
+        const docSnap = await getDoc(doc(db, 'stories', uId));
         if (docSnap.exists()) {
           const d = docSnap.data();
           setDates(d);
-          const ev = _.map(clone(all_events["duel"]), (e) => {
-            const cp = _.find(docSnap.data()["events"], { name: e.name });
+          const packageType = d['package_type'] ?? 'duel';
+          const ev = _.map(clone(all_events[packageType]), (e) => {
+            const cp = _.find(docSnap.data()['events'], { name: e.name });
             return cp ? { ...e, ...cp, status: true } : e;
           });
           data = { ...d };
-          pcks = d["packages"];
-          data["package_type"] = d["package_type"] ?? "duel";
-          data["package_suggestions"] =
-            d["package_suggestions"] ?? package_variants;
-          setPackageBooked(d["package_booked"]);
-          setEvents(ev);
+          pcks = d['packages'];
+          // data['package_type'] = packageType;
+          // data['package_suggestions'] =
+          //   d['package_suggestions'] ?? package_variants;
+          setPackageBooked(d['package_booked']);
+          const sortedEv = sort(ev, events_order)
+          setEvents(sortedEv);
         } else {
           //No User found in DB
         }
@@ -85,9 +89,9 @@ export default function AddressForm() {
 
       // })
       if (pcks.length <= 0) {
-        const defPacks = await getProperties("packages");
+        const defPacks = await getProperties('packages');
         setDefaultPackages(defPacks);
-        pcks = defPacks["duel"];
+        pcks = defPacks['duel'];
       }
       setPackages(pcks);
       setLoading(false);
@@ -116,36 +120,36 @@ export default function AddressForm() {
     try {
       setLoading(true);
       const newUId = (
-        uId ?? generateUId(groom_name, bride_name, eventDate.format("DDMMYYYY"))
+        uId ?? generateUId(groom_name, bride_name, eventDate.format('DDMMYYYY'))
       ).toLowerCase();
       const evs = clone(events);
       var ev = await refactorEvents(newUId, evs);
       var pcks = await composePackage(ev, data);
-      if (!customer_contact) delete data["customer_contact"];
-      if (!customer_email) delete data["customer_email"];
-      data["uid"] = newUId;
-      data["packages"] = pcks;
-      data["events"] = ev;
-      data["wedding_date"] = eventDate.toDate();
-      const docId = doc(db, "stories", newUId);
+      if (!customer_contact) delete data['customer_contact'];
+      if (!customer_email) delete data['customer_email'];
+      data['uid'] = newUId;
+      data['packages'] = pcks;
+      data['events'] = ev;
+      data['wedding_date'] = eventDate.toDate();
+      const docId = doc(db, 'stories', newUId);
       const docSnap = await getDoc(docId);
       if (coverPhoto) {
-        const url = await uploadFile(newUId, coverPhoto, "asset/cover_photo");
-        data["cover_photo"] = url;
+        const url = await uploadFile(newUId, coverPhoto, 'asset/cover_photo');
+        data['cover_photo'] = url;
       }
       if (docSnap.exists()) {
-        data["status"] = "Package Updated"
+        data['status'] = 'Package Updated';
         await updateDoc(docId, data);
         const existingEvents = docSnap.data()?.events;
         ev = _.difference(ev, existingEvents);
       } else {
-        data["status"] = "Package Created"
+        data['status'] = 'Package Created';
         await setDoc(docId, data);
       }
       createStorage(newUId, ev);
       reset();
       setLoading(false);
-      navigate("/admin", { replace: true });
+      navigate('/admin', { replace: true });
     } catch (err) {
       console.log(err);
       setLoading(false);
@@ -155,15 +159,15 @@ export default function AddressForm() {
   };
 
   const refactorEvents = async (uId, ev) => {
-    var e = _.filter(ev, ["status", true]);
+    var e = _.filter(ev, ['status', true]);
     for (let i = 0; i < e?.length; i++) {
       if (e[i]?.image) {
         const dUrl = await uploadFile(
           uId,
           e[i]?.image,
-          "asset/" + e[i]?.name?.toLowerCase().replace(/ +/g, "_")
+          'asset/' + e[i]?.name?.toLowerCase().replace(/ +/g, '_')
         );
-        e[i]["cover_photo"] = dUrl;
+        e[i]['cover_photo'] = dUrl;
       }
       delete e[i]?.status;
       delete e[i]?.image;
@@ -187,9 +191,9 @@ export default function AddressForm() {
     var pck = clone(packages);
     const evKeys = _.map(ev, (o) => o.id);
     package_variants.forEach((v, i) => {
-      pck[v]["payment_terms"] = composePaymentTerms(v, evKeys);
+      pck[v]['payment_terms'] = composePaymentTerms(v, evKeys);
     });
-    pck["quotation"] = {
+    pck['quotation'] = {
       date: quotationDate.toDate(),
       validity: quotationValidity.toDate(),
     };
@@ -210,17 +214,20 @@ export default function AddressForm() {
 
   return (
     <div>
-      <CFAppBar title={`${uId?"Update":"Add"} client`} handleLogout={handleLogout} />
+      <CFAppBar
+        title={`${uId ? 'Update' : 'Add'} client`}
+        handleLogout={handleLogout}
+      />
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          background: "white",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          background: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
           flexGrow: 1,
-          padding: "20px 5%",
-          gap: { xs: 5, md: "none" },
+          padding: '20px 5%',
+          gap: { xs: 5, md: 'none' },
         }}
       >
         {/* <Fab variant="extended" size="small" color="primary" >
@@ -230,11 +237,11 @@ export default function AddressForm() {
           <form onSubmit={handleSubmit}>
             <GroomDetails control={control} register={register} />
             <Divider
-              style={{ width: "100%", marginTop: 24, marginBottom: 24 }}
+              style={{ width: '100%', marginTop: 24, marginBottom: 24 }}
             />
             <BrideDetails control={control} register={register} />
             <Divider
-              style={{ width: "100%", marginTop: 24, marginBottom: 24 }}
+              style={{ width: '100%', marginTop: 24, marginBottom: 24 }}
             />
 
             <WeddingDetails
@@ -244,7 +251,7 @@ export default function AddressForm() {
               setEventDate={setEventDate}
             />
             <Divider
-              style={{ width: "100%", marginTop: 24, marginBottom: 24 }}
+              style={{ width: '100%', marginTop: 24, marginBottom: 24 }}
             />
 
             <PackageDetails
@@ -262,7 +269,7 @@ export default function AddressForm() {
               setQuotationValidity={setQuotationValidity}
             />
             <Divider
-              style={{ width: "100%", marginTop: 24, marginBottom: 24 }}
+              style={{ width: '100%', marginTop: 24, marginBottom: 24 }}
             />
             {packageType && (
               <Grid>
@@ -274,7 +281,7 @@ export default function AddressForm() {
                     setRefresh={setRefresh}
                   />
                 </Grid>
-                <Divider style={{ width: "100%" }} />
+                <Divider style={{ width: '100%' }} />
               </Grid>
             )}
             <DirectionAndCover
@@ -283,7 +290,7 @@ export default function AddressForm() {
               coverPhoto
               setCoverPhoto
             />
-            <Divider style={{ width: "100%" }} />
+            <Divider style={{ width: '100%' }} />
 
             <Grid
               container
@@ -302,7 +309,7 @@ export default function AddressForm() {
                   variant="contained"
                   onClick={handleSubmit(onSubmit)}
                 >
-                 {uId? "Update" : "Save"}
+                  {uId ? 'Update' : 'Save'}
                 </Button>
               </FormGrid>
             </Grid>

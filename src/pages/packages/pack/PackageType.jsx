@@ -15,6 +15,8 @@ import logo from "assets/watermark.png";
 import PaymentTerms from "./PaymentTerms";
 import _ from "lodash";
 import { clone } from "src/shared/StringUtils";
+import { objArraySort, sort } from "../../../shared/ObjectUtils";
+import { events_order } from "../../../constants/events";
 
 const PackageType = ({ pack, variant = "golden", events, size }) => {
   const theme = useTheme();
@@ -84,7 +86,7 @@ const PackageType = ({ pack, variant = "golden", events, size }) => {
             <Typography>{pack?.description}</Typography>
           </Grid>
           <Grid container direction="column">
-            {(clone(events) ?? []).map((v, k) => {
+            {objArraySort(clone(events) ?? [], events_order).map((v, k) => {
               const s = _.keyBy(v?.services, "id");
               const items = s[variant]?.items ?? [];
               if (items.length > 0)

@@ -4,11 +4,15 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const options = ['Notes', 'Delete'];
-
 const ITEM_HEIGHT = 48;
 
-const MoreActions = ({ row, openConfirm, handleBook, handleNotes }) => {
+const MoreActions = ({ row, openConfirm, handleDataUpdate, handleNotes }) => {
+  const options = [
+    'Notes',
+    'Delete Package',
+    row?.disable_whatsapp ? 'Enable Sharing' : 'Disable Sharing',
+  ];
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -18,11 +22,21 @@ const MoreActions = ({ row, openConfirm, handleBook, handleNotes }) => {
     setAnchorEl(null);
   };
   const handleMenuChange = (o) => {
-    if (o === 'Delete') {
-      openConfirm(row);
-    }
-    else if( o === "Notes"){
-        handleNotes(row)
+    switch (o) {
+      case 'Delete':
+        openConfirm(row);
+        break;
+      case 'Notes':
+        handleNotes(row);
+        break;
+      case 'Disable Sharing':
+        handleDataUpdate(row, { disable_whatsapp: true });
+        break;
+      case 'Enable Sharing':
+        handleDataUpdate(row, { disable_whatsapp: false });
+        break;
+      default:
+        break;
     }
     handleClose();
   };
