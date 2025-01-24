@@ -11,8 +11,14 @@ import AvatarListItem from 'components/AvatarListItem';
 import { package_mode_label } from 'constants/packages';
 
 const ClientDetails = ({ data }) => {
-  console.log(data)
   const theme = useTheme();
+
+  const getUserName = () => {
+    var user = []
+    if (data?.groom_name?.trim()) user.push(data?.groom_name?.trim())
+    if (data?.bride_name?.trim()) user.push(data?.bride_name?.trim())
+    return user.join(" & ")
+  };
   return (
     <Grid container spacing={4} alignItems="center" justifyContent="center">
       <Grid size={{ xs: 12, md: 4 }} order={{ xs: 2, sm: 2, md: 1 }}>
@@ -45,9 +51,10 @@ const ClientDetails = ({ data }) => {
             />
           </Grid>
           <List>
+            <AvatarListItem label={getUserName()} icon="people" />
             <AvatarListItem
               label={package_mode_label[data?.package_type ?? 'duel']}
-              icon="people"
+              icon="loyalty"
             />
             <AvatarListItem
               label={_.map(data?.events, 'name').join(', ')}
@@ -101,9 +108,7 @@ const ClientDetails = ({ data }) => {
         <Grid>
           <Typography variant="h5" className="name" align="center">
             {data?.groom_name?.trim() && data?.bride_name?.trim()
-              ? _.capitalize(data?.groom_name?.split(' ')[0]) +
-                ' & ' +
-                _.capitalize(data?.bride_name?.split(' ')[0])
+              ? getUserName()
               : 'Wedding Package'}
           </Typography>
         </Grid>
@@ -158,10 +163,17 @@ const ClientDetails = ({ data }) => {
               icon="clock"
               variant="primary"
             />
+            
             <AvatarListItem
               label="Quotation By"
               value="Camrin Films"
               icon="business"
+              variant="primary"
+            />
+            <AvatarListItem
+              label="Contact"
+              value="+91 99471 54117"
+              icon="call"
               variant="primary"
             />
           </List>

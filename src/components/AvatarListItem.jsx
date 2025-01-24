@@ -13,6 +13,8 @@ import {
   Event,
   LockClock,
   Business,
+  Loyalty,
+  Call,
 } from "@mui/icons-material";
 
 import Grid from "@mui/material/Grid2";
@@ -31,12 +33,14 @@ const AvatarListItem = ({ label, value, icon, variant = "secondary" }) => {
       people: <PeopleOutline sx={iconStyle} />,
       event: <Event sx={iconStyle} />,
       clock: <LockClock sx={iconStyle} />,
+      loyalty:<Loyalty sx={iconStyle}/>,
+      call:<Call sx={iconStyle}/>
     };
     return icons[name];
   };
 
   return (
-    <ListItem>
+    <ListItem >
       <ListItemAvatar>
         <Avatar
           sx={{
