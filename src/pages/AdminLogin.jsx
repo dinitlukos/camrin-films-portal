@@ -5,7 +5,7 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid2";
 import { AuthContext } from "src/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import Loader from "./Loader";
+import Loader from "components/Loader";
 import { FormHelperText } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { FormInputText } from "components/FormInputText";

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AdminHome from './pages/admin/home/AdminHome';
-import AddClient from './pages/clients/AddClient';
+import AddClient from './pages/admin/clients/AddClient';
 import CollectionPage from './pages/CollectionPage';
 import HomePage from './pages/HomePage';
 import router from './Routes';

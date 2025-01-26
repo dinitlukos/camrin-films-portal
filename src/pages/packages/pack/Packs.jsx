@@ -3,7 +3,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from 'src/firebase';
-import Loader from '../../Loader';
+import Loader from 'components/Loader';
 
 import { Construction, DownloadOutlined } from '@mui/icons-material';
 import { alpha, IconButton, Typography, useTheme } from '@mui/material';

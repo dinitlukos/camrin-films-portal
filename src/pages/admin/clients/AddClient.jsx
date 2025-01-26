@@ -18,7 +18,7 @@ import { package_variants } from 'constants/packages';
 import { db } from 'src/firebase';
 import composePaymentTerms from 'src/shared/payment';
 import { clone, generateUId } from 'src/shared/StringUtils';
-import Loader from '../Loader';
+import Loader from 'components/Loader';
 import BrideDetails from './BrideDetails';
 import ClientEvents from './ClientEvents';
 import { createStorage, getProperties, uploadFile } from './ClientService';
@@ -26,8 +26,8 @@ import DirectionAndCover from './DirectionAndCover';
 import GroomDetails from './GroomDetails';
 import PackageDetails from './PackageDetails';
 import WeddingDetails from './WeddingDetails';
-import { events_order } from '../../constants/events';
-import { sort } from '../../shared/ObjectUtils';
+import { events_order } from 'constants/events';
+import { sort } from 'src/shared/ObjectUtils';
 
 export default function AddressForm() {
   const [eventDate, setEventDate] = useState(dayjs(moment()));

@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from 'src/auth/AuthProvider';
 import CFAppBar from 'components/CFAppBar';
 import { db } from 'src/firebase';
-import Loader from '../../Loader';
+import Loader from 'components/Loader';
 import ClientTable from './ClientTable';
 import ConfirmModel from './ConfirmModel';
 import { ToastContainer } from 'react-toastify';
@@ -34,9 +34,8 @@ const COL_KEYS = [
   'customer_contact',
   'customer_email',
   'status',
-  'disable_whatsapp'
+  'disable_whatsapp',
 ];
-
 
 export default function AdminHome() {
   const navigate = useNavigate();
@@ -49,6 +48,7 @@ export default function AdminHome() {
   const [open, setOpen] = useState(false);
 
   const fetchStories = async () => {
+    setLoading(true)
     const docSnap = await getDocs(collection(db, 'stories'));
     if (docSnap.docs.length > 0) {
       const data = _.map(docSnap?.docs, (v) => {
@@ -58,6 +58,7 @@ export default function AdminHome() {
     } else {
       navigate('/', { replace: true });
     }
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -143,7 +144,11 @@ export default function AdminHome() {
       />
       <Grid container spacing={3} justifyContent="end">
         <Grid container spacing={3} paddingRight={6} paddingTop={4}>
-          <Button variant="contained" color='secondary' onClick={handleAddClient}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleAddClient}
+          >
             Add Client
           </Button>
         </Grid>
@@ -157,92 +162,13 @@ export default function AdminHome() {
           handleDataUpdate={handleDataUpdate}
           handleNotes={handleNotes}
         />
-        {/* <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Groom Name</StyledTableCell>
-                <StyledTableCell>Bride Name</StyledTableCell>
-                <StyledTableCell>Wedding Date&nbsp;</StyledTableCell>
-                <StyledTableCell>Booked Package&nbsp;</StyledTableCell>
-                <StyledTableCell>Package Link&nbsp;</StyledTableCell>
-                <StyledTableCell>Events&nbsp;</StyledTableCell>
-                <StyledTableCell>Actions&nbsp;</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <StyledTableRow
-                  key={row.bride_name}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <StyledTableCell component="th" scope="row">
-                    {row.groom_name}
-                  </StyledTableCell>
-                  <StyledTableCell>{row.bride_name}</StyledTableCell>
-                  <StyledTableCell>
-                    {moment(row.wedding_date.toDate()).format("Do MMM yyyy")}
-                  </StyledTableCell>
-                  <StyledTableCell>{row.package_booked ?? ""}</StyledTableCell>
-                  <StyledTableCell>
-                    <Link
-                      component="button"
-                      onClick={() => handleNavigation(row?.uid)}
-                    >
-                      {row?.uid}
-                    </Link>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Grid container spacing={1}>
-                      {row.events.map((v, k) => (
-                        <Chip
-                          size="small"
-                          key={k}
-                          label={v.name}
-                          color="primary"
-                          variant="outlined"
-                        />
-                      ))}
-                    </Grid>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Grid container direction="row" spacing={1}>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => openConfirm(row)}
-                      >
-                        <DeleteIcon color="error" />
-                      </IconButton>
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => handleEdit(row)}
-                      >
-                        <EditIcon color="secondary" />
-                      </IconButton>
-                      {row?.package_booked ? (
-                        <Button
-                          size="small"
-                          onClick={() => handleDataUpdate(null, row)}
-                        >
-                          Cancel Booking
-                        </Button>
-                      ) : (
-                        <PackageBook bookPackage={(p) => handleDataUpdate(p, row)} />
-                      )}
-                    </Grid>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer> */}
       </Grid>
       <ConfirmModel
         open={open}
         handleDelete={handleDelete}
         handleModelClose={handleModelClose}
       />
-      <ToastContainer position="bottom-center"/>
+      <ToastContainer position="bottom-center" />
       {loading && <Loader />}
     </div>
   );

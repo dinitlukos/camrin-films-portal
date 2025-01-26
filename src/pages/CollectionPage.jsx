@@ -23,7 +23,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import { db } from "src/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import Loader from "./Loader";
+import Loader from "components/Loader";
 import { Typography } from "@mui/material";
 
 const CollectionPage = () => {

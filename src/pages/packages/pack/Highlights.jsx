@@ -43,6 +43,7 @@ const Highlights = () => {
               <img
                 src={circle}
                 alt="Camrin Films Logo"
+                style={{height: "60px"}}
                 className="highlight-spin-img"
               />
             </Grid>

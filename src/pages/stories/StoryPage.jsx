@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LogoContainer from "components/LogoContainer";
 import WishIcon from "components/WishIcon";
 import { db } from "src/firebase";
-import Loader from "../Loader";
+import Loader from "components/Loader";
 import WishesModal from "../WishesModal";
 import InvitationSide from "./InvitationSide";
 import bgDoodle from 'assets/bg_doodle.png';
