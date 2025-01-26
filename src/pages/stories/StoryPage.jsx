@@ -9,6 +9,8 @@ import { db } from "src/firebase";
 import Loader from "../Loader";
 import WishesModal from "../WishesModal";
 import InvitationSide from "./InvitationSide";
+import bgDoodle from 'assets/bg_doodle.png';
+
 import "./StoryPage.css";
 
 const StoryPage = () => {
@@ -104,12 +106,13 @@ const StoryPage = () => {
           direction="column"
           alignItems="center"
           justifyContent="center"
+          sx={{backgroundImage: `url(${bgDoodle})`,}}
         >
           <LogoContainer />
 
-          <div className="footer-note">
+          <Grid container justifyContent='center'>
             {storyData?.wishes && (
-              <div className="scrollable-container">
+              <Grid container direction="row"  spacing={2} className="scrollable-container">
                 {storyData?.wishes?.map((card, index) => (
                   <div
                     className="card"
@@ -123,7 +126,7 @@ const StoryPage = () => {
                     </span>
                   </div>
                 ))}
-              </div>
+              </Grid>
             )}
             <div className="wish-conatiner">
               <button onClick={handleWishesClick} className="button-wishes">
@@ -133,7 +136,7 @@ const StoryPage = () => {
                 </span>
               </button>
             </div>
-          </div>
+          </Grid>
           {isModalOpen && (
             <WishesModal
               modalLoading={modalLoading}

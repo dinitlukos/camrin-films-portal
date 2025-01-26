@@ -1,21 +1,21 @@
-import "./WishesModal.css";
+import './WishesModal.css';
 
 const WishesModal = ({ ...props }) => {
   return (
     <div
-      className={`modal-overlay ${props.isVisible ? "fade-in" : "fade-out"}`}
+      className={`modal-overlay ${props.isVisible ? 'fade-in' : 'fade-out'}`}
     >
       <div className="modal-content">
         <div className="container">
           <div className="modal-card">
             <div className="textarea-div">
-            <textarea
-              className="textarea"
-              value={props.wishing}
-              placeholder="Type your wishes & greetings..."
-              onChange={(e) => props.setWishing(e.target.value)}
-            ></textarea>
-</div>
+              <textarea
+                className="textarea"
+                value={props.wishing}
+                placeholder="Type your wishes & greetings..."
+                onChange={(e) => props.setWishing(e.target.value)}
+              ></textarea>
+            </div>
             {/* <button className="video-record-btn">
                 <span role="img" aria-label="video">
                   🎥

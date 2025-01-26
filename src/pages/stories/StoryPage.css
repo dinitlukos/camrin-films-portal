@@ -126,15 +126,15 @@
 }
 
 .card {
-  min-width: 300px;
-  max-width: 300px;
-  height: 200px;
+  min-width: 150px;
+  max-width: 150px;
+  /* min-height: 150px; */
   /* background: linear-gradient(145deg, #fff, #f0f0f0); */
   font-family: "Fuzzy Bubbles", cursive;
   border: 1px solid #ddd;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+  /* display: flex; */
+  /* justify-content: center;
+  flex-direction: column; */
   border-radius: 12px;
   padding: 15px;
   text-align: left;

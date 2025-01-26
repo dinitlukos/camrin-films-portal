@@ -296,7 +296,7 @@ const ClientTable = ({
     try {
       if (row?.customer_contact) {
         const res = await sendWhatsappMessage(row?.customer_contact, row?.id);
-        handleDataUpdate(row, { status: 'Package Sent', disable_whatsapp: false });
+        handleDataUpdate(row, { status: 'Package Sent', disable_whatsapp: true });
         toast.success('Message sent successfully');
       } else {
         toast.error('Invalid phone number to send message');
