@@ -2,13 +2,11 @@ import {
   addDoc,
   collection,
   doc,
-  getDoc,
   getDocs,
-  setDoc,
-  updateDoc,
+  updateDoc
 } from 'firebase/firestore';
-import { db } from 'src/firebase';
 import _ from 'lodash';
+import { db } from 'src/firebase';
 
 export const getNotes = async (uId) => {
   const docSnap = await getDocs(collection(db, 'notes', uId + '/messages'));

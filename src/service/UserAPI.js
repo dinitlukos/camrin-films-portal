@@ -7,6 +7,6 @@ export const UserAPI = {
       data: data,
       method: 'POST',
     });
-    return res.data();
+    return res.data;
   },
 };

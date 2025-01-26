@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import _ from 'lodash';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from 'src/auth/AuthProvider';
@@ -28,6 +28,7 @@ import PackageDetails from './PackageDetails';
 import WeddingDetails from './WeddingDetails';
 import { events_order } from 'constants/events';
 import { sort } from 'src/shared/ObjectUtils';
+import { UserPackageAPI } from '../../../service/UserPackageAPI';
 
 export default function AddressForm() {
   const [eventDate, setEventDate] = useState(dayjs(moment()));
@@ -49,6 +50,7 @@ export default function AddressForm() {
   const [defaultPackages, setDefaultPackages] = useState([]);
   const [packageType, setPackageType] = useState('duel');
   const [defaultEvents, setDefaultEvents] = useState([]);
+  const [oldData, setOldData] = useState()
 
   const uId = location.state?.id;
 
@@ -58,22 +60,23 @@ export default function AddressForm() {
       var pcks = [];
       setLoading(true);
       if (uId) {
-        const docSnap = await getDoc(doc(db, 'stories', uId));
-        if (docSnap.exists()) {
-          const d = docSnap.data();
+        const d = await UserPackageAPI.getPackageById(uId);
+
+        // const docSnap = await getDoc(doc(db, 'stories', uId));
+
+        if (d) {
+          // const d = docSnap.data();
+          setOldData(d)
           setDates(d);
           const packageType = d['package_type'] ?? 'duel';
           const ev = _.map(clone(all_events[packageType]), (e) => {
-            const cp = _.find(docSnap.data()['events'], { name: e.name });
+            const cp = _.find(d['events'], { name: e.name });
             return cp ? { ...e, ...cp, status: true } : e;
           });
           data = { ...d };
           pcks = d['packages'];
-          // data['package_type'] = packageType;
-          // data['package_suggestions'] =
-          //   d['package_suggestions'] ?? package_variants;
           setPackageBooked(d['package_booked']);
-          const sortedEv = sort(ev, events_order)
+          const sortedEv = sort(ev, events_order);
           setEvents(sortedEv);
         } else {
           //No User found in DB
@@ -102,18 +105,33 @@ export default function AddressForm() {
     }
   };
 
-  const setDates = (d) => {
+  const setDates = (d, db = 'mongo') => {
     const date = d?.wedding_date;
     const qDate = d?.packages?.quotation?.date;
-    const qVDate = d?.packages?.quotation?.validity;
-    if (date) setEventDate(dayjs(date.toDate()));
-    if (qDate) setQuotationDate(dayjs(qDate.toDate()));
-    if (qVDate) setQuotationValidity(dayjs(qVDate.toDate()));
+    const vDate = d?.packages?.quotation?.validity;
+    if (date) setEventDate(dayjs(db == 'mongo' ? date : date.toDate()));
+    if (qDate) setQuotationDate(dayjs(db == 'mongo' ? qDate : qDate.toDate()));
+    if (vDate)
+      setQuotationValidity(dayjs(db == 'mongo' ? vDate : vDate.toDate()));
   };
 
-  const { register, handleSubmit, reset, control, getValues } = useForm({
-    defaultValues: async () => await fetchUserData(),
-  });
+  const { register, handleSubmit, reset, control, getValues, setValue } =
+    useForm();
+
+  const setFormData = async () => {
+    const d = await fetchUserData();
+    if (d) {
+      _.forIn(d, (v, k) => {
+        setValue(k, v);
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (location.state?.id) {
+      setFormData();
+    }
+  }, [location.state]);
 
   const onSubmit = async (data) => {
     const { groom_name, bride_name, customer_email, customer_contact } = data;
@@ -131,20 +149,21 @@ export default function AddressForm() {
       data['packages'] = pcks;
       data['events'] = ev;
       data['wedding_date'] = eventDate.toDate();
-      const docId = doc(db, 'stories', newUId);
-      const docSnap = await getDoc(docId);
+      delete data['_id'];
+      // const docId = doc(db, 'stories', newUId);
+      // const docSnap = await getDoc(docId);
       if (coverPhoto) {
         const url = await uploadFile(newUId, coverPhoto, 'asset/cover_photo');
         data['cover_photo'] = url;
       }
-      if (docSnap.exists()) {
+      if (uId === newUId && oldData) {
         data['status'] = 'Package Updated';
-        await updateDoc(docId, data);
-        const existingEvents = docSnap.data()?.events;
+        await UserPackageAPI.update(newUId, data);
+        const existingEvents = oldData.events;
         ev = _.difference(ev, existingEvents);
       } else {
         data['status'] = 'Package Created';
-        await setDoc(docId, data);
+        await UserPackageAPI.create(data);
       }
       createStorage(newUId, ev);
       reset();

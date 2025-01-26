@@ -5,7 +5,7 @@ import AdminHome from "./pages/admin/home/AdminHome";
 import HomePage from "./pages/HomePage";
 import AddClient from "./pages/admin/clients/AddClient";
 import CollectionPage from "./pages/CollectionPage";
-import AdminLogin from "./pages/AdminLogin";
+import AdminLogin from "./pages/admin/login/AdminLogin";
 import ChooseEvent from "./pages/admin/clients/ChooseEvent";
 import PackagePage from "./pages/packages/pack/PackageType";
 import StoryPage from "./pages/stories/StoryPage";
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         path: "/login",
         element: (
           <PrivateRoute>
-            <AdminLogin />
+            {/* <AdminLogin /> */}
           </PrivateRoute>
         ),
       },

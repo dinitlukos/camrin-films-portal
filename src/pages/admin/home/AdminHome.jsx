@@ -1,26 +1,18 @@
 import Grid from '@mui/material/Grid2';
-import { styled } from '@mui/material/styles';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 
 import { Button, useTheme } from '@mui/material';
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  updateDoc,
-} from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from 'src/auth/AuthProvider';
 import CFAppBar from 'components/CFAppBar';
-import { db } from 'src/firebase';
 import Loader from 'components/Loader';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { AuthContext } from 'src/auth/AuthProvider';
+import { db } from 'src/firebase';
+import { UserPackageAPI } from '../../../service/UserPackageAPI';
 import ClientTable from './ClientTable';
 import ConfirmModel from './ConfirmModel';
-import { ToastContainer } from 'react-toastify';
 
 const COL_KEYS = [
   'id',
@@ -48,17 +40,29 @@ export default function AdminHome() {
   const [open, setOpen] = useState(false);
 
   const fetchStories = async () => {
-    setLoading(true)
-    const docSnap = await getDocs(collection(db, 'stories'));
-    if (docSnap.docs.length > 0) {
-      const data = _.map(docSnap?.docs, (v) => {
-        return _.pick({ ...v.data(), id: v.id }, COL_KEYS);
+    setLoading(true);
+    //     const docSnap = await getDocs(collection(db, 'stories'));
+    //     docSnap.docs.map(async (v,k) => {
+    //       const d = v.data()
+    //       const newD = {...d }
+    //       var events = newD['events']
+    // events.map((v,k) => {
+    //   console.log(v['date'])
+    // })
+    //       // console.log(packages)
+    //       await UserPackageAPI.update(newD['uid'], {packages: packages})
+
+    //     })
+    const d = await UserPackageAPI.getAllPackages();
+    if (d && d.length > 0) {
+      const data = _.map(d, (v) => {
+        return _.pick({ ...v, id: v.uid }, COL_KEYS);
       });
       setRows(data);
     } else {
       navigate('/', { replace: true });
     }
-    setLoading(false)
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -95,7 +99,8 @@ export default function AdminHome() {
   const handleDataUpdate = async (row, d) => {
     try {
       setLoading(true);
-      await updateDoc(doc(db, 'stories', row?.id), d);
+      // await updateDoc(doc(db, 'stories', row?.id), d);
+      await UserPackageAPI.update(row?.id, d);
       await fetchStories();
       setLoading(false);
     } catch (err) {

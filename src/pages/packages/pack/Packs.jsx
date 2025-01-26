@@ -1,28 +1,25 @@
 import Grid from '@mui/material/Grid2';
+import Loader from 'components/Loader';
 import { doc, getDoc } from 'firebase/firestore';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from 'src/firebase';
-import Loader from 'components/Loader';
 
 import { Construction, DownloadOutlined } from '@mui/icons-material';
 import { alpha, IconButton, Typography, useTheme } from '@mui/material';
+import { package_variants } from 'constants/packages';
 import { useReactToPrint } from 'react-to-print';
+import { clone } from 'src/shared/StringUtils';
+import AddOns from './Addons';
 import ClientDetails from './ClientDetails';
+import Highlights from './Highlights';
+import ImportantNotes from './ImportantNotes';
 import PackageType from './PackageType';
+import Payment from './Payment';
 import ServiceFailure from './ServiceFailure';
 import Terms from './Terms';
-import ImportantNotes from './ImportantNotes';
-import AddOns from './Addons';
-import Payment from './Payment';
-import DateSlider from './DateSlider';
-import Highlights from './Highlights';
-import { package_variants } from 'constants/packages';
-import { clone } from 'src/shared/StringUtils';
-import PackageTypeAccordion from './PackageTypeAccordion';
+import { UserPackageAPI } from '../../../service/UserPackageAPI';
 
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 const Packs = ({ printRef }) => {
   const theme = useTheme();
@@ -38,12 +35,13 @@ const Packs = ({ printRef }) => {
 
   const { storyId } = useParams();
 
-  const fetchStoryData = async (sId) => {
+  const fetchStoryData = async (cfId) => {
     setLoading(true);
     try {
-      const docSnap = await getDoc(doc(db, 'stories', sId));
-      if (docSnap.exists()) {
-        setData(docSnap.data());
+      const d = await UserPackageAPI.getPackageById(cfId)
+      // const docSnap = await getDoc(doc(db, 'stories', sId));
+      if (d) {
+        setData(d);
       } else {
         // navigate("/", { replace: true });
       }

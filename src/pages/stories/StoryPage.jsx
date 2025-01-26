@@ -12,6 +12,7 @@ import InvitationSide from "./InvitationSide";
 import bgDoodle from 'assets/bg_doodle.png';
 
 import "./StoryPage.css";
+import { UserPackageAPI } from "../../service/UserPackageAPI";
 
 const StoryPage = () => {
   const { storyId } = useParams();
@@ -30,12 +31,13 @@ const StoryPage = () => {
   const fetchStoryData = async (sId) => {
     setLoading(true);
     try {
-      const docSnap = await getDoc(doc(db, "stories", sId));
-      if (docSnap.exists()) {
-        setStoryData(docSnap.data());
-        const date = docSnap.data()["wedding_date"];
-        setDate(date.toDate());
-        setDays(moment(date.toDate()).diff(moment.now(), "days"));
+      // const docSnap = await getDoc(doc(db, "stories", sId));
+      const d = await UserPackageAPI.getPackageById(sId)
+      if (d) {
+        setStoryData(d);
+        const date = d["wedding_date"];
+        setDate(date);
+        setDays(moment(date).diff(moment.now(), "days"));
       } else {
         navigate("/", { replace: true });
       }

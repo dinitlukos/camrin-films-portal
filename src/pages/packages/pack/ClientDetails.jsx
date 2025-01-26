@@ -99,10 +99,10 @@ const ClientDetails = ({ data }) => {
             color="primary"
             fontWeight="900"
           >
-            {moment(data?.wedding_date?.toDate()).format('DD')}
+            {moment(data?.wedding_date).format('DD')}
           </Typography>
           <Typography variant="body2" component="div" color="textPrimary">
-            {moment(data?.wedding_date?.toDate()).format('MMM yyyy')}
+            {moment(data?.wedding_date).format('MMM yyyy')}
           </Typography>
         </Grid>
         <Grid>
@@ -149,7 +149,7 @@ const ClientDetails = ({ data }) => {
           <List>
             <AvatarListItem
               label="Quotation Date"
-              value={moment(data?.packages?.quotation?.date.toDate()).format(
+              value={moment(data?.packages?.quotation?.date).format(
                 'Do MMM yyyy'
               )}
               icon="clock"
@@ -158,7 +158,7 @@ const ClientDetails = ({ data }) => {
             <AvatarListItem
               label="Valid Upto"
               value={moment(
-                data?.packages?.quotation?.validity.toDate()
+                data?.packages?.quotation?.validity
               ).format('Do MMM yyyy')}
               icon="clock"
               variant="primary"

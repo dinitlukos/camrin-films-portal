@@ -114,7 +114,7 @@ const ClientTable = ({
       ...def_column_config,
       field: 'wedding_date',
       headerName: 'Wedding Date',
-      valueGetter: (value, row) => value.toDate(),
+      valueGetter: (value, row) => value,
       renderCell: (params) => {
         return <span>{moment(params.value).format('Do MMM yyyy')}</span>;
       },
@@ -124,7 +124,7 @@ const ClientTable = ({
       field: 'packages',
       headerName: 'Enquiry Date',
       type: 'date',
-      valueGetter: (value, row) => value.quotation.date.toDate(),
+      valueGetter: (value, row) => new Date(value.quotation.date),
       renderCell: (params) => {
         return <span>{moment(params.value).format('Do MMM yyyy')}</span>;
       },

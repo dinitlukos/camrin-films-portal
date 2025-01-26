@@ -2,7 +2,6 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { db } from 'src/firebase';
 import ReadMeFile from 'assets/readme.txt';
-import axios from 'axios';
 
 export const getProperties = async (service) => {
   const docSnap = await getDoc(doc(db, 'Properties', service));
