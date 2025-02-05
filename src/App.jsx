@@ -51,10 +51,10 @@ const App = () => {
             <Route path="/:storyId" element={<StoryPage />} />
             <Route path="/gallery/:storyId" element={<CollectionPage />} />
             <Route path="/packages/:storyId" element={<PackagePage />} />
-            <Route path="/admin/client" element={<AddClient />} />
             <Route path="/login" element={<AdminLogin />} />
             <Route path="/chatus" element={<OpenWhatsApp />} />
             <Route path="/enquiry" element={<EnquiryPage />} />
+            <Route path="/admin/client" element={<AddClient />} />
             <Route
               path="/admin"
               element={

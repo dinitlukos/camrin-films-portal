@@ -14,6 +14,7 @@ const breakpoints = [1080, 640, 384, 256, 128, 96, 64, 48];
 
 const Gallery1 = () => {
   const [index, setIndex] = useState(-1);
+  
 
   return (
     <Grid>
