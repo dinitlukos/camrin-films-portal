@@ -8,23 +8,37 @@ export const payment_terms = [
   },
   {
     title: "Engagement Day Payment",
-    key: "engagement",
+    key: "single_engagement",
     description:
       "INPUT_PERCENTAGE% of the total package cost to be paid on the engagement day.",
     order: 2,
   },
   {
+    title: "Engagement Day Payment",
+    key: "duel_engagement",
+    description:
+      "INPUT_PERCENTAGE% of the total package cost to be paid on the engagement day.",
+    order: 3,
+  },
+  {
     title: "Wedding Day Payment",
-    key: "wedding",
+    key: "single_wedding",
     description:
       "INPUT_PERCENTAGE% of the total package cost to be paid on the wedding day.",
-    order: 3,
+    order: 4,
+  },
+  {
+    title: "Wedding Day Payment",
+    key: "duel_wedding",
+    description:
+      "INPUT_PERCENTAGE% of the total package cost to be paid on the wedding day.",
+    order: 5,
   },
   {
     title: "Balance Payment",
     key: "balance",
     description:
       "The remaining amount is to be paid after the design confirmation of the album leafs, prior to printing the album.",
-    order: 4,
+    order: 6,
   },
 ];

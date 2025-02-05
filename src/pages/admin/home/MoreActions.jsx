@@ -23,7 +23,7 @@ const MoreActions = ({ row, openConfirm, handleDataUpdate, handleNotes }) => {
   };
   const handleMenuChange = (o) => {
     switch (o) {
-      case 'Delete':
+      case 'Delete Package':
         openConfirm(row);
         break;
       case 'Notes':

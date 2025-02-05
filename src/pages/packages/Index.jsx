@@ -4,7 +4,7 @@ import homeBg from 'assets/bg_doodle.png';
 import LogoContainer from 'components/LogoContainer';
 import About from './about/About';
 import CustomTabs from './CustomTabs';
-import Gallery from './gallary/Gallery';
+import Gallery from './gallary/Gallery1';
 import './index.css';
 import Packs from './pack/Packs';
 
@@ -29,6 +29,7 @@ const PackagePage = () => {
       ref={printRef}
     >
       <LogoContainer />
+      <div style={{height:"24px"}}/>
       <CustomTabs value={value} handleChange={handleChange} />
       <div style={{ padding: '20px 0' }}>
         <div hidden={value !== 0}>

@@ -54,7 +54,7 @@ const Highlights = () => {
             <Grid
               container
               key={k}
-              style={{ border: `10px solid ${alpha(theme.palette[v?.color ?? "primary"]["main"],.2)}` }}
+              style={{ border: `10px solid ${alpha(theme.palette[v?.color ?? "primary"]["main"],.2)}`, background:alpha('#fff',.7) }}
               size={{ sm: 12, md: 6 }}
               spacing={2}
             >

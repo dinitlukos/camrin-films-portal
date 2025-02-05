@@ -25,8 +25,11 @@ import {
   Stack,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import { useForm } from "react-hook-form";
 
 const HomePage = () => {
+    const { register, handleSubmit, reset, control, getValues, setValue } =
+      useForm({ defaultValues: {} });
   const stories = [
     { id: "huma-vuzd", title: "Story of Huma Vuzd" },
     { id: "another-story", title: "Another Story" },
@@ -77,6 +80,7 @@ const HomePage = () => {
             padding="0 15%"
             textAlign="justify"
             fontSize="1rem"
+            color="textPrimary"
           >
             As producers of some of the finest wedding photography in India, we
             are there to fulfill a standard, not a time frame. We attend your

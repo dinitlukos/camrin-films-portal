@@ -7,5 +7,5 @@ export const generateUId = (g, b, d) => {
     ? b.replace(/ +/g, "").substring(0, 3)
     : Math.random().toString(36).substring(3, 7);
   let p3 = d ? d : Math.floor(Math.random() * 100000001);
-  return [p1, p2, Math.random().toString(36).substring(3, 8), p3].join("-");
+  return [p1, p2, Math.random().toString(36).substring(3, 8), p3].join("-").toLowerCase();
 };

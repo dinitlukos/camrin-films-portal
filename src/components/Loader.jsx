@@ -11,6 +11,7 @@ const styles = {
     position: 'fixed',
     left: 0,
     top: 0,
+    zIndex:10000,
     backgroundColor: alpha(CFColors.info.main, 0.3),
   },
 };

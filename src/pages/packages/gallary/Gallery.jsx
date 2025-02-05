@@ -1,45 +1,57 @@
-import Grid from "@mui/material/Grid2";
-import React, { useState } from "react";
-import { MasonryPhotoAlbum } from "react-photo-album";
-import "react-photo-album/masonry.css";
-import Lightbox from "yet-another-react-lightbox";
-import Download from "yet-another-react-lightbox/plugins/download";
-import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
-import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import Zoom from "yet-another-react-lightbox/plugins/zoom";
-import { GallaryImages } from "constants/gallaryImages";
+import Grid from '@mui/material/Grid2';
+import React, { useState } from 'react';
+import 'react-photo-album/masonry.css';
+import HTMLFlipBook from 'react-pageflip';
+import { Document, Page, pdfjs } from 'react-pdf';
 
-const breakpoints = [1080, 640, 384, 256, 128, 96, 64, 48];
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url
+).toString();
+const Pages = React.forwardRef((props, ref) => {
+  return (
+    <div className="demoPage" ref={ref}>
+      {props.children}
+      {/* <p>Page number: {props.number}</p> */}
+    </div>
+  );
+});
 
+Pages.displayName = 'Pages';
 
 const Gallery = () => {
   const [index, setIndex] = useState(-1);
+  const [numPages, setNumPages] = useState();
 
-  return (<Grid>
-    <MasonryPhotoAlbum
-    photos={GallaryImages.map(({src,height,width})=>({
-      src,
-      width,
-      height,
-      srcSet:  breakpoints.map((breakpoint) => ({
-        src: src,
-        width: breakpoint,
-        height: Math.round((height / width) * breakpoint),
-      })),
-    }))}
-    onClick={({ index }) => {
-      return setIndex(index);
-    }}
-    />
-    <Lightbox
-              slides={GallaryImages}
-              open={index >= 0}
-              index={index}
-              close={() => setIndex(-1)}
-              plugins={[Fullscreen, Slideshow, Thumbnails, Zoom, Download]}
-            />
-  </Grid>);
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+  const url =
+    'https://storage.googleapis.com/eltorobattalion-web-public/D__WebFiles_HomeportDownloads_Library_1274_USNSCC%20Parent%20Handbook%202023_15DEC23%20(1).pdf';
+
+  return (
+    <Grid
+      container
+      sx={{ background: 'green' }}
+      justifyContent="center"
+      alignItems="center"
+    >
+      {/* <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+        <HTMLFlipBook width={400} height={570}>
+          {[...Array(numPages).keys()].map((pNum) => (
+            <Pages key={pNum} number={pNum + 1}>
+              <Page
+                pageNumber={pNum + 1}
+                width={400}
+                renderAnnotationLayer={false}
+                renderTextLayer={false}
+              />
+            </Pages>
+          ))}
+        </HTMLFlipBook>
+      </Document> */}
+    </Grid>
+  );
 };
 
-export default Gallery
+export default Gallery;

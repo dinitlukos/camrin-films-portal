@@ -13,6 +13,8 @@ import StoryPage from './pages/stories/StoryPage';
 import AdminClientNotes from './pages/admin/notes/AdminClientNotes';
 import OpenWhatsApp from './pages/OpenWhatsApp';
 import favIcon from "assets/logo.jpg"
+import Chat from './pages/admin/chat/Chat';
+import EnquiryPage from './pages/Enquiry/EnquiryPage';
 
 
 const theme = createTheme({
@@ -52,6 +54,7 @@ const App = () => {
             <Route path="/admin/client" element={<AddClient />} />
             <Route path="/login" element={<AdminLogin />} />
             <Route path="/chatus" element={<OpenWhatsApp />} />
+            <Route path="/enquiry" element={<EnquiryPage />} />
             <Route
               path="/admin"
               element={
@@ -65,6 +68,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <AdminClientNotes />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/chat"
+              element={
+                <PrivateRoute>
+                  <Chat />
                 </PrivateRoute>
               }
             />

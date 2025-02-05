@@ -1,8 +1,8 @@
 import Grid from '@mui/material/Grid2'
 
-import circle from "assets/packages/cf_circle_primary.png";
-import logo from "assets/packages/cf_logo.png";
-const LogoContainer = () => {
+import circlePrimary from "assets/packages/cf_circle_primary.png";
+import logoPrimary from "assets/packages/cf_logo.png";
+const LogoContainer = ({circle, logo}) => {
     return <Grid
     container
     alignItems="center"
@@ -10,9 +10,10 @@ const LogoContainer = () => {
     direction="column"
   >
     <div>
-      <img src={logo} alt="Camrin Films Logo" className="logo" />
-      <div>
-        <img src={circle} alt="Camrin Films Logo" className="spin-img" />
+    
+      <img src={logo ?? logoPrimary} alt="Camrin Films Logo" className="logo" />
+      <div style={{height:0}}>
+        <img src={circle ?? circlePrimary} alt="Camrin Films Logo" className="spin-img" />
       </div>
     </div>
   </Grid>

@@ -44,13 +44,13 @@ export default function AddressForm() {
   const location = useLocation();
   const navigate = useNavigate();
   const { logOut } = React.useContext(AuthContext);
-  const [events, setEvents] = useState(clone(all_events['duel']));
+  const [events, setEvents] = useState(clone(sort(all_events['duel'], events_order)));
   const [packages, setPackages] = useState([]);
   const [packageBooked, setPackageBooked] = useState();
   const [defaultPackages, setDefaultPackages] = useState([]);
   const [packageType, setPackageType] = useState('duel');
   const [defaultEvents, setDefaultEvents] = useState([]);
-  const [oldData, setOldData] = useState()
+  const [oldData, setOldData] = useState();
 
   const uId = location.state?.id;
 
@@ -58,6 +58,8 @@ export default function AddressForm() {
     try {
       var data = event_default_values;
       var pcks = [];
+      const defPacks = await getProperties('packages');
+        setDefaultPackages(defPacks);
       setLoading(true);
       if (uId) {
         const d = await UserPackageAPI.getPackageById(uId);
@@ -66,7 +68,7 @@ export default function AddressForm() {
 
         if (d) {
           // const d = docSnap.data();
-          setOldData(d)
+          setOldData(d);
           setDates(d);
           const packageType = d['package_type'] ?? 'duel';
           const ev = _.map(clone(all_events[packageType]), (e) => {
@@ -74,6 +76,9 @@ export default function AddressForm() {
             return cp ? { ...e, ...cp, status: true } : e;
           });
           data = { ...d };
+          _.forIn(d, (v, k) => {
+            setValue(k, v);
+          });
           pcks = d['packages'];
           setPackageBooked(d['package_booked']);
           const sortedEv = sort(ev, events_order);
@@ -92,8 +97,6 @@ export default function AddressForm() {
 
       // })
       if (pcks.length <= 0) {
-        const defPacks = await getProperties('packages');
-        setDefaultPackages(defPacks);
         pcks = defPacks['duel'];
       }
       setPackages(pcks);
@@ -116,21 +119,22 @@ export default function AddressForm() {
   };
 
   const { register, handleSubmit, reset, control, getValues, setValue } =
-    useForm();
+    useForm({ defaultValues: event_default_values });
 
   const setFormData = async () => {
-    const d = await fetchUserData();
-    if (d) {
-      _.forIn(d, (v, k) => {
-        setValue(k, v);
-      });
-    }
+    // const d = await fetchUserData();
+    // if (d) {
+    //   _.forIn(d, (v, k) => {
+    //     setValue(k, v);
+    //   });
+    // }
   };
 
   useEffect(() => {
-    if (location.state?.id) {
-      setFormData();
-    }
+    // if (location.state?.id) {
+    //   setFormData();
+    // }
+    fetchUserData();
   }, [location.state]);
 
   const onSubmit = async (data) => {
@@ -202,7 +206,7 @@ export default function AddressForm() {
   const handlePackageType = (v) => {
     setPackageType(v);
     setPackages(defaultPackages[v]);
-    setEvents(clone(all_events[v]));
+    setEvents(sort(clone(all_events[v]),events_order));
     setRefresh(!refresh);
   };
 
@@ -273,6 +277,23 @@ export default function AddressForm() {
               style={{ width: '100%', marginTop: 24, marginBottom: 24 }}
             />
 
+            
+            {packageType && (
+              <Grid>
+                <Grid container spacing={3}>
+                  <ClientEvents
+                    events={events}
+                    pcks={packages}
+                    setEvents={setEvents}
+                    setRefresh={setRefresh}
+                  />
+                </Grid>
+                <Divider style={{ width: '100%' }} />
+              </Grid>
+            )}
+            <Divider
+              style={{ width: '100%', marginTop: 24, marginBottom: 24 }}
+            />
             <PackageDetails
               control={control}
               packages={packages}
@@ -287,22 +308,7 @@ export default function AddressForm() {
               quotationValidity={quotationValidity}
               setQuotationValidity={setQuotationValidity}
             />
-            <Divider
-              style={{ width: '100%', marginTop: 24, marginBottom: 24 }}
-            />
-            {packageType && (
-              <Grid>
-                <Grid container spacing={3}>
-                  <ClientEvents
-                    events={events}
-                    pcks={packages}
-                    setEvents={setEvents}
-                    setRefresh={setRefresh}
-                  />
-                </Grid>
-                <Divider style={{ width: '100%' }} />
-              </Grid>
-            )}
+            
             <DirectionAndCover
               control={control}
               register={register}

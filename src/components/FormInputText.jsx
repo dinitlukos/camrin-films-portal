@@ -14,6 +14,8 @@ export const FormInputText = ({
   rules={},
   containerSize = { xs: 12, md: 6 },
   type = "text",
+  multiline = false,
+  minRows=1
 }) => {
   const FormGrid = styled(Grid)(() => ({
     display: "flex",
@@ -42,6 +44,8 @@ export const FormInputText = ({
             placeholder={placeholder}
             variant="outlined"
             inputRef={inputRef}
+            multiline={multiline}
+            minRows={minRows}
           />
           {error && (
             <FormHelperText error style={{ marginLeft: 10 }}>

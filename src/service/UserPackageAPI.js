@@ -31,4 +31,11 @@ export const UserPackageAPI = {
     });
     return res.data;
   },
+  deletePackageById: async (cfId) => {
+    const res = await api.request({
+      url: `userpackages/${cfId}`,
+      method: 'DELETE',
+    });
+    return res.data;
+  },
 };

@@ -41,18 +41,21 @@ export default function AdminHome() {
 
   const fetchStories = async () => {
     setLoading(true);
-    //     const docSnap = await getDocs(collection(db, 'stories'));
-    //     docSnap.docs.map(async (v,k) => {
-    //       const d = v.data()
-    //       const newD = {...d }
-    //       var events = newD['events']
-    // events.map((v,k) => {
-    //   console.log(v['date'])
-    // })
-    //       // console.log(packages)
-    //       await UserPackageAPI.update(newD['uid'], {packages: packages})
+    // const docSnap = await getDocs(collection(db, 'stories'));
+    // docSnap.docs.map(async (v, k) => {
+    //   const d = v.data();
+    //   if (d.uid == 'isa-aas-f3iko-08092025') {
+    //     const newD = { ...d, "wedding_date": d["wedding_date"].toDate() };
+    //     newD["packages"]["quotation"]["date"] = newD["packages"]["quotation"]["date"].toDate()
+    //     newD["packages"]["quotation"]["validity"] = newD["packages"]["quotation"]["validity"].toDate()
+    //   await UserPackageAPI.create(newD)
 
-    //     })
+    //     console.log(newD)
+    //   }
+
+    //   // console.log(packages)
+    //   // await UserPackageAPI.update(newD['uid'], {packages: packages})
+    // });
     const d = await UserPackageAPI.getAllPackages();
     if (d && d.length > 0) {
       const data = _.map(d, (v) => {
@@ -85,7 +88,8 @@ export default function AdminHome() {
     try {
       handleModelClose();
       setLoading(true);
-      await deleteDoc(doc(db, 'stories', selectedRow?.id));
+      // await deleteDoc(doc(db, 'stories', selectedRow?.id));
+      await UserPackageAPI.deletePackageById(selectedRow?.id);
       await fetchStories();
       setSelectedRow(null);
       setLoading(false);

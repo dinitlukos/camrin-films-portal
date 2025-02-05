@@ -3,14 +3,19 @@ import { payment_terms } from "../constants/payment";
 import { clone } from "./StringUtils";
 
 const getPercentage = (events, e, mode) => {
+// console.log(events,e,mode)
   if (mode == "silver") {
     switch (e) {
       case "booking":
         return 10;
-      case "engagement":
-        return _.includes(events, "wedding") ? 40 : 80;
-      case "wedding":
-        return _.includes(events, "engagement") ? 40 : 80;
+      case "single_engagement":
+        return _.includes(events, "single_wedding") ? 40 : 80;
+      case "duel_engagement":
+        return _.includes(events, "duel_wedding") ? 40 : 80;
+      case "single_wedding":
+        return _.includes(events, "single_engagement") ? 40 : 80;
+      case "duel_wedding":
+        return _.includes(events, "duel_engagement") ? 40 : 80;
       default:
         return 0;
     }
@@ -18,21 +23,29 @@ const getPercentage = (events, e, mode) => {
     switch (e) {
       case "booking":
         return 10;
-      case "engagement":
-        return _.includes(events, "wedding") ? 40 : 80;
-      case "wedding":
-        return _.includes(events, "engagement") ? 40 : 80;
+      case "single_engagement":
+        return _.includes(events, "single_wedding") ? 40 : 80;
+      case "duel_engagement":
+        return _.includes(events, "duel_wedding") ? 40 : 80;
+      case "single_wedding":
+        return _.includes(events, "single_engagement") ? 40 : 80;
+      case "duel_wedding":
+        return _.includes(events, "duel_engagement") ? 40 : 80;
       default:
         return 0;
     }
   } else if (mode == "platinum") {
     switch (e) {
       case "booking":
-        return 10;
-      case "engagement":
-        return _.includes(events, "wedding") ? 35 : 75;
-      case "wedding":
-        return _.includes(events, "engagement") ? 40 : 75;
+        return 20;
+      case "single_engagement":
+        return _.includes(events, "single_wedding") ? 35 : 75;
+      case "duel_engagement":
+        return _.includes(events, "duel_wedding") ? 35 : 75;
+      case "single_wedding":
+        return _.includes(events, "single_engagement") ? 40 : 75;
+      case "duel_wedding":
+        return _.includes(events, "duel_engagement") ? 40 : 75;
       default:
         return 0;
     }
@@ -41,10 +54,14 @@ const getPercentage = (events, e, mode) => {
     switch (e) {
       case "booking":
         return 20;
-      case "engagement":
-        return _.includes(events, "wedding") ? 35 : 75;
-      case "wedding":
-        return _.includes(events, "engagement") ? 40 : 75;
+      case "single_engagement":
+        return _.includes(events, "single_wedding") ? 35 : 75;
+      case "duel_engagement":
+        return _.includes(events, "duel_wedding") ? 35 : 75;
+      case "single_wedding":
+        return _.includes(events, "single_engagement") ? 40 : 75;
+      case "duel_wedding":
+        return _.includes(events, "duel_engagement") ? 40 : 75;
       default:
         return 0;
     }
@@ -63,7 +80,7 @@ const getTerms = (t, ev, mode) => {
   return _.sortBy(out, ["order"]);
 };
 
-const composePaymentTerms = (v, evs = ["wedding"]) => {
+const composePaymentTerms = (v, evs = []) => {
   var ev = evs;
   ev.push("booking", "balance");
   let trm = [];

@@ -44,3 +44,43 @@ export const sendWhatsappMessage = async (phoneNumber, uId) => {
   );
   return res;
 };
+
+export const sendWhatsappEnquiry = async (d, uId) => {
+  const data = {
+    messaging_product: 'whatsapp',
+    to: "919747976867",
+    type: 'template',
+    template: {
+      name: 'enquiries',
+      components: [
+        {
+          type:'body',
+          parameters: d
+        },
+        {
+          type: 'button',
+          sub_type:'url',
+          index:'0',
+          parameters: [
+            {
+              type: 'text',
+              text: uId,
+            },
+          ],
+        },
+      ],
+      language: { code: 'en_US' },
+    },
+  };
+  const res = await axios.post(
+    'https://graph.facebook.com/v21.0/515258515010956/messages',
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_WHATSAPP_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  return res;
+};
