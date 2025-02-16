@@ -2,17 +2,16 @@ import Grid from '@mui/material/Grid2';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 
-import { Button, useTheme } from '@mui/material';
+import { Button } from '@mui/material';
 import CFAppBar from 'components/CFAppBar';
 import Loader from 'components/Loader';
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { AuthContext } from 'src/auth/AuthProvider';
-import { db } from 'src/firebase';
 import { UserPackageAPI } from '../../../service/UserPackageAPI';
 import ClientTable from './ClientTable';
 import ConfirmModel from './ConfirmModel';
+import PackageRejectionModel from './PackageRejectionModel';
 
 const COL_KEYS = [
   'id',
@@ -31,34 +30,24 @@ const COL_KEYS = [
 
 export default function AdminHome() {
   const navigate = useNavigate();
-  const theme = useTheme();
   const [rows, setRows] = useState([]);
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const { logOut } = React.useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [selectedRow, setSelectedRow] = useState();
   const [open, setOpen] = useState(false);
+  const [openPackageRejection, setOpenPackageRejection] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState('');
 
   const fetchStories = async () => {
     setLoading(true);
-    // const docSnap = await getDocs(collection(db, 'stories'));
-    // docSnap.docs.map(async (v, k) => {
-    //   const d = v.data();
-    //   if (d.uid == 'isa-aas-f3iko-08092025') {
-    //     const newD = { ...d, "wedding_date": d["wedding_date"].toDate() };
-    //     newD["packages"]["quotation"]["date"] = newD["packages"]["quotation"]["date"].toDate()
-    //     newD["packages"]["quotation"]["validity"] = newD["packages"]["quotation"]["validity"].toDate()
-    //   await UserPackageAPI.create(newD)
-
-    //     console.log(newD)
-    //   }
-
-    //   // console.log(packages)
-    //   // await UserPackageAPI.update(newD['uid'], {packages: packages})
-    // });
-    const d = await UserPackageAPI.getAllPackages();
+    const filter = {
+      package_booked: { $eq: null },
+      reject: { $exists: false },
+    };
+    const d = await UserPackageAPI.filter(filter);
     if (d && d.length > 0) {
-      const data = _.map(d, (v) => {
+      const fd = _.filter(d, (e) => !e?.reject);
+      const data = _.map(fd, (v) => {
         return _.pick({ ...v, id: v.uid }, COL_KEYS);
       });
       setRows(data);
@@ -76,8 +65,8 @@ export default function AdminHome() {
     navigate('/admin/client', { state: { id: d.id } });
   };
 
-  const handleAddClient = () => {
-    navigate('/admin/client');
+  const handleRoutes = (path) => {
+    navigate(path);
   };
 
   const handleNotes = (d) => {
@@ -88,7 +77,6 @@ export default function AdminHome() {
     try {
       handleModelClose();
       setLoading(true);
-      // await deleteDoc(doc(db, 'stories', selectedRow?.id));
       await UserPackageAPI.deletePackageById(selectedRow?.id);
       await fetchStories();
       setSelectedRow(null);
@@ -103,13 +91,22 @@ export default function AdminHome() {
   const handleDataUpdate = async (row, d) => {
     try {
       setLoading(true);
-      // await updateDoc(doc(db, 'stories', row?.id), d);
       await UserPackageAPI.update(row?.id, d);
       await fetchStories();
       setLoading(false);
     } catch (err) {
       setLoading(false);
     }
+  };
+
+  const handleRejection = async (reason, type) => {
+    setOpenPackageRejection(false);
+    await handleDataUpdate(selectedRow, {
+      status: 'Package Rejected',
+      reject: true,
+      rejectionDetails: reason ?? '',
+      rejectionReason: type,
+    });
   };
 
   const handleLogout = async () => {
@@ -127,21 +124,17 @@ export default function AdminHome() {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+  const openPackageRejectionModal = (row) => {
+    setSelectedRow(row);
+    setOpenPackageRejection(true);
   };
 
   const handleModelClose = () => {
     setOpen(false);
   };
-
-  const handleNavigation = (uid) => {
-    const url = location.origin + '/packages/' + uid;
-    window.open(url, '_blank').focus();
+  const handleRejectionModelClose = () => {
+    setOpenPackageRejection(false);
+    setRejectionReason('');
   };
 
   return (
@@ -155,8 +148,29 @@ export default function AdminHome() {
         <Grid container spacing={3} paddingRight={6} paddingTop={4}>
           <Button
             variant="contained"
+            color="info"
+            onClick={() => handleRoutes('/admin/booked')}
+          >
+            Booked Packages
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => handleRoutes('/admin/chat')}
+          >
+            Whatsapp Messages
+          </Button>
+          <Button
+            variant="contained"
+            color="warning"
+            onClick={() => handleRoutes('/admin/offers')}
+          >
+            Offers
+          </Button>
+          <Button
+            variant="contained"
             color="secondary"
-            onClick={handleAddClient}
+            onClick={() => handleRoutes('/admin/client')}
           >
             Add Client
           </Button>
@@ -167,6 +181,7 @@ export default function AdminHome() {
           data={rows}
           loading={loading}
           openConfirm={openConfirm}
+          openRejection={openPackageRejectionModal}
           handleEdit={handleEdit}
           handleDataUpdate={handleDataUpdate}
           handleNotes={handleNotes}
@@ -176,6 +191,11 @@ export default function AdminHome() {
         open={open}
         handleDelete={handleDelete}
         handleModelClose={handleModelClose}
+      />
+      <PackageRejectionModel
+        open={openPackageRejection}
+        handleRejection={handleRejection}
+        handleModelClose={handleRejectionModelClose}
       />
       <ToastContainer position="bottom-center" />
       {loading && <Loader />}

@@ -17,6 +17,7 @@ const PackageItems = ({
   packages,
   onPackageChange,
   handlePackageChange,
+  showPrice=true
 }) => {
   const theme = useTheme();
   return (
@@ -33,8 +34,7 @@ const PackageItems = ({
       </AccordionSummary>
       <AccordionDetails>
         <Grid container direction="row" spacing={2} sx={{pb:2}}>
-        <Grid size={{xs:4}}>
-
+        {showPrice && <Grid size={{xs:4}}>
         <TextField
           label="Price"
           fullWidth
@@ -42,9 +42,8 @@ const PackageItems = ({
           onChange={(e) => onPackageChange(variant, "price", e.target.value)}
           value={packages[variant]?.price ?? 0}
         />
-        </Grid>
-        <Grid size={{xs:8}}>
-
+        </Grid>}
+        <Grid size={{xs: showPrice ? 8 : 12}}>
         <TextField
           label="Offer"
           fullWidth
@@ -55,8 +54,6 @@ const PackageItems = ({
         />
         </Grid>
         </Grid>
-        
-        
         <EditableList
           data={packages[variant]?.deliverables}
           size={{ xs: 12 }}

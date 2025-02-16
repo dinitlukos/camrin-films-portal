@@ -13,4 +13,8 @@ export const package_mode_label = {
     single:"Single Package",
     duel:"Bride & Groom"
 }
+export const package_requestors = [
+  {id:"groom",label:"Groom"}, {id:"bride",label:"Bride"}]
 export const package_variants = ["silver", "golden", "platinum", "diamond"];
+
+export const rejection_reasons = ["Not Interested", "High price"]

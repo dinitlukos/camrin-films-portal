@@ -8,7 +8,7 @@ import FormGrid from "components/FormGrid";
 import { FormInputMultiSelect } from "components/FormInputMultiSelect";
 import { FormInputSelect } from "components/FormInputSelect";
 import { package_modes, package_variants } from "constants/packages";
-import PackageItems from "./PackageItems";
+import PackageItems from "../shared/PackageItems";
 
 const PackageDetails = ({
   control,

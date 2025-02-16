@@ -12,10 +12,13 @@ import PackagePage from './pages/packages/Index';
 import StoryPage from './pages/stories/StoryPage';
 import AdminClientNotes from './pages/admin/notes/AdminClientNotes';
 import OpenWhatsApp from './pages/OpenWhatsApp';
-import favIcon from "assets/logo.jpg"
+import favIcon from 'assets/logo.jpg';
 import Chat from './pages/admin/chat/Chat';
 import EnquiryPage from './pages/Enquiry/EnquiryPage';
-
+import GeneralGallery from './pages/gallary/Gallery';
+import OffersAdmin from './pages/admin/offers/Offers';
+import Book from './pages/admin/book/Book';
+import BookedPackages from './pages/admin/home/booked_packages/BookedPackages';
 
 const theme = createTheme({
   palette: {
@@ -35,11 +38,10 @@ const theme = createTheme({
   },
 });
 const App = () => {
-
-  useEffect(()=>{
-    const favicon = document.getElementById("favicon");
-    favicon.href = favIcon
-  },[])
+  useEffect(() => {
+    const favicon = document.getElementById('favicon');
+    favicon.href = favIcon;
+  }, []);
   return (
     // <React.StrictMode>
     // <RouterProvider router={router}/>
@@ -54,12 +56,20 @@ const App = () => {
             <Route path="/login" element={<AdminLogin />} />
             <Route path="/chatus" element={<OpenWhatsApp />} />
             <Route path="/enquiry" element={<EnquiryPage />} />
-            <Route path="/admin/client" element={<AddClient />} />
+            {/* <Route path="/gallery" element={<GeneralGallery/>}/> */}
             <Route
               path="/admin"
               element={
                 <PrivateRoute>
                   <AdminHome />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/client"
+              element={
+                <PrivateRoute>
+                  <AddClient />
                 </PrivateRoute>
               }
             />
@@ -76,6 +86,30 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <Chat />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/book"
+              element={
+                <PrivateRoute>
+                  <Book />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/booked"
+              element={
+                <PrivateRoute>
+                  <BookedPackages />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/offers"
+              element={
+                <PrivateRoute>
+                  <OffersAdmin />
                 </PrivateRoute>
               }
             />

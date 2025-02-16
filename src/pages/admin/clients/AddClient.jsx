@@ -2,33 +2,30 @@ import { Divider } from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid2';
 import { Box } from '@mui/system';
+import CFAppBar from 'components/CFAppBar';
+import ErrorSnackBar from 'components/ErrorSnackBar';
+import FormGrid from 'components/FormGrid';
+import Loader from 'components/Loader';
+import { all_events, event_default_values, events_order } from 'constants/events';
+import { package_variants } from 'constants/packages';
 import dayjs from 'dayjs';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import _ from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from 'src/auth/AuthProvider';
-import CFAppBar from 'components/CFAppBar';
-import ErrorSnackBar from 'components/ErrorSnackBar';
-import FormGrid from 'components/FormGrid';
-import { all_events, event_default_values } from 'constants/events';
-import { package_variants } from 'constants/packages';
-import { db } from 'src/firebase';
+import { UserPackageAPI } from 'src/service/UserPackageAPI';
+import { sort } from 'src/shared/ObjectUtils';
 import composePaymentTerms from 'src/shared/payment';
 import { clone, generateUId } from 'src/shared/StringUtils';
-import Loader from 'components/Loader';
-import BrideDetails from './BrideDetails';
+import BrideDetails from '../shared/BrideDetails';
+import GroomDetails from '../shared/GroomDetails';
+import WeddingDetails from '../shared/WeddingDetails';
 import ClientEvents from './ClientEvents';
 import { createStorage, getProperties, uploadFile } from './ClientService';
 import DirectionAndCover from './DirectionAndCover';
-import GroomDetails from './GroomDetails';
 import PackageDetails from './PackageDetails';
-import WeddingDetails from './WeddingDetails';
-import { events_order } from 'constants/events';
-import { sort } from 'src/shared/ObjectUtils';
-import { UserPackageAPI } from '../../../service/UserPackageAPI';
 
 export default function AddressForm() {
   const [eventDate, setEventDate] = useState(dayjs(moment()));
@@ -89,10 +86,8 @@ export default function AddressForm() {
       }
 
       // const p = await getProperties("packages");
-      // console.log(JSON.stringify(p))
 
       // p.forEach(async (e,k) => {
-      //   console.log(e,k)
       // await updateProperties("packages", p)
 
       // })
@@ -166,6 +161,7 @@ export default function AddressForm() {
         const existingEvents = oldData.events;
         ev = _.difference(ev, existingEvents);
       } else {
+        delete data['package_booked']
         data['status'] = 'Package Created';
         await UserPackageAPI.create(data);
       }

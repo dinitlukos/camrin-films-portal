@@ -31,10 +31,26 @@ export const UserPackageAPI = {
     });
     return res.data;
   },
+  book: async (cfId, data) => {
+    const res = await api.request({
+      url: `userpackages/bookings/${cfId}`,
+      data: data,
+      method: 'PUT',
+    });
+    return res.data;
+  },
   deletePackageById: async (cfId) => {
     const res = await api.request({
       url: `userpackages/${cfId}`,
       method: 'DELETE',
+    });
+    return res.data;
+  },
+  filter: async (data) => {
+    const res = await api.request({
+      url: 'userpackages/filter',
+      data: data,
+      method: 'POST',
     });
     return res.data;
   },

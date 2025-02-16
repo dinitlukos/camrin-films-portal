@@ -41,7 +41,7 @@ export const FormInputPhone = ({
               height: '40px',
               color: theme.palette.text.secondary,
             }}
-            specialLabel='Phone Number'
+            specialLabel={label}
             inputStyle={{
               width: '100%',
               height: '40px',

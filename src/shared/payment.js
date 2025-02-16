@@ -3,7 +3,6 @@ import { payment_terms } from "../constants/payment";
 import { clone } from "./StringUtils";
 
 const getPercentage = (events, e, mode) => {
-// console.log(events,e,mode)
   if (mode == "silver") {
     switch (e) {
       case "booking":

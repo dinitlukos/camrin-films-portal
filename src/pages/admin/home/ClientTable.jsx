@@ -1,26 +1,22 @@
+import { ContentCopy, Preview, Share } from '@mui/icons-material';
+import EditIcon from '@mui/icons-material/Edit';
+import { Box, Button, IconButton, Typography, useTheme } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import {
   DataGrid,
-  GridToolbar,
-  GridToolbarContainer,
   GridToolbarColumnsButton,
-  GridToolbarFilterButton,
+  GridToolbarContainer,
   GridToolbarDensitySelector,
-  GridToolbarQuickFilter,
+  GridToolbarFilterButton,
+  GridToolbarQuickFilter
 } from '@mui/x-data-grid';
-import Grid from '@mui/material/Grid2';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import moment from 'moment';
-import { Box, Button, IconButton, Typography, useTheme } from '@mui/material';
-import PackageBook from './Book';
 import { useLocation } from 'react-router-dom';
-import { sendWhatsappMessage } from 'src/service/whatsapp';
 import { toast } from 'react-toastify';
-import SendIcon from '@mui/icons-material/WhatsApp';
-import { WhatsApp, Preview, ContentCopy, Share } from '@mui/icons-material';
-import MoreActions from './MoreActions';
+import { sendWhatsappMessage } from 'src/service/whatsapp';
 import { whatsAppMessage } from '../../../constants/messages';
+import PackageBook from './Book';
+import MoreActions from './MoreActions';
 
 const CustomToolbar = () => {
   return (
@@ -49,6 +45,7 @@ const ClientTable = ({
   uId,
   loading,
   openConfirm,
+  openRejection,
   handleEdit,
   handleDataUpdate,
   handleNotes,
@@ -71,7 +68,6 @@ const ClientTable = ({
       headerName: 'Bride',
     },
     {
-      // ...def_column_config,
       field: 'customer_contact',
       headerName: 'Phone Number',
       headerClassName: 'table-header',
@@ -88,7 +84,6 @@ const ClientTable = ({
               container
               direction="row"
               spacing={2}
-              // justifyContent="center"
               alignItems="center"
             >
               <Typography variant="body2" component="span">
@@ -124,7 +119,7 @@ const ClientTable = ({
       field: 'packages',
       headerName: 'Enquiry Date',
       type: 'date',
-      valueGetter: (value, row) => new Date(value.quotation.date),
+      valueGetter: (value, row) => new Date(value?.quotation?.date),
       renderCell: (params) => {
         return <span>{moment(params.value).format('Do MMM yyyy')}</span>;
       },
@@ -154,15 +149,6 @@ const ClientTable = ({
             sx={{ height: '100%' }}
           >
             <Grid container direction="row" spacing={2}>
-              {/* <Button
-                size="small"
-                variant="outlined"
-                color="secondary"
-                startIcon={<Preview color="secondary" />}
-                onClick={() => handleNavigation(params.row)}
-              >
-                View
-              </Button> */}
               <Button
                 size="small"
                 variant="outlined"
@@ -188,7 +174,6 @@ const ClientTable = ({
       field: 'booking',
       headerName: 'Booking',
       headerAlign: 'center',
-      // headerClassName: 'table-header',
       renderCell: (params) => {
         return (
           <Grid
@@ -209,6 +194,7 @@ const ClientTable = ({
                 </Button>
               ) : (
                 <PackageBook
+                data= {params.row}
                   bookPackage={(p) =>
                     handleDataUpdate(params.row, { package_booked: p })
                   }
@@ -222,18 +208,10 @@ const ClientTable = ({
     {
       field: 'actions',
       headerName: '',
-      // headerClassName: 'table-header',
       width: 180,
       renderCell: (params) => {
         return (
           <Grid container direction="row" spacing={1}>
-            {/* <IconButton
-              aria-label="delete"
-              onClick={() => openConfirm(params.row)}
-            >
-              <DeleteIcon color="error" />
-            </IconButton> */}
-
             <IconButton
               aria-label="view"
               onClick={() => handleNavigation(params.row)}
@@ -247,29 +225,10 @@ const ClientTable = ({
             >
               <EditIcon color="secondary" />
             </IconButton>
-            {/* <IconButton
-              aria-label="editnote"
-              onClick={() => handleNotes(params.row)}
-            >
-              <EditNoteIcon color="warning" />
-            </IconButton> */}
-            {/* {params.row?.package_booked ? (
-              <Button
-                size="small"
-                onClick={() => handleDataUpdate(params.row, { package_booked: null })}
-              >
-                Cancel Booking
-              </Button>
-            ) : (
-              <PackageBook
-                bookPackage={(p) =>
-                  handleDataUpdate(params.row, { package_booked: p })
-                }
-              />
-            )} */}
             <MoreActions
               row={params.row}
               openConfirm={openConfirm}
+              openRejection={openRejection}
               handleDataUpdate={handleDataUpdate}
               handleNotes={handleNotes}
             />

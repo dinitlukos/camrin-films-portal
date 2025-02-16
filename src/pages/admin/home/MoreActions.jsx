@@ -6,11 +6,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const ITEM_HEIGHT = 48;
 
-const MoreActions = ({ row, openConfirm, handleDataUpdate, handleNotes }) => {
+const MoreActions = ({ row, openConfirm, handleDataUpdate, handleNotes, openRejection }) => {
   const options = [
     'Notes',
     'Delete Package',
     row?.disable_whatsapp ? 'Enable Sharing' : 'Disable Sharing',
+    'Reject User'
   ];
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -34,6 +35,9 @@ const MoreActions = ({ row, openConfirm, handleDataUpdate, handleNotes }) => {
         break;
       case 'Enable Sharing':
         handleDataUpdate(row, { disable_whatsapp: false });
+        break;
+      case 'Reject User':
+        openRejection(row);
         break;
       default:
         break;

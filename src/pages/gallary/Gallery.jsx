@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import 'react-photo-album/masonry.css';
 import HTMLFlipBook from 'react-pageflip';
 import { Document, Page, pdfjs } from 'react-pdf';
+import pdf from './ByteBeatJan2024.pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -19,7 +20,7 @@ const Pages = React.forwardRef((props, ref) => {
 
 Pages.displayName = 'Pages';
 
-const Gallery = () => {
+const GeneralGallery = () => {
   const [index, setIndex] = useState(-1);
   const [numPages, setNumPages] = useState();
 
@@ -33,25 +34,37 @@ const Gallery = () => {
     <Grid
       container
       sx={{ background: 'green' }}
-      justifyContent="center"
-      alignItems="center"
+      // justifyContent="center"
+      // alignItems="center"
     >
-      {/* <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-        <HTMLFlipBook width={400} height={570}>
+      <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess} style={{height:"733px"}}>
+        <HTMLFlipBook
+          width={550}
+          height={733}
+          size="stretch"
+          minWidth={315}
+          maxWidth={550}
+          // minHeight={400}
+          maxHeight={733}
+          maxShadowOpacity={0.5}
+          // showCover={true}
+          // mobileScrollSupport={true}
+        >
           {[...Array(numPages).keys()].map((pNum) => (
             <Pages key={pNum} number={pNum + 1}>
               <Page
                 pageNumber={pNum + 1}
-                width={400}
+                width={550}
+                height={773}
                 renderAnnotationLayer={false}
                 renderTextLayer={false}
               />
             </Pages>
           ))}
         </HTMLFlipBook>
-      </Document> */}
+      </Document>
     </Grid>
   );
 };
 
-export default Gallery;
+export default GeneralGallery;

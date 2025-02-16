@@ -3,16 +3,19 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import { package_variants } from "constants/packages";
+import { useNavigate } from "react-router-dom";
 
 const options = package_variants;
 
-export default function PackageBook({bookPackage}) {
+export default function PackageBook({data, bookPackage}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate()
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+      navigate('/admin/book', { state: { id: data.id } });
+    // setAnchorEl(event.currentTarget);
   };
 
   const handleMenuItemClick = (event, index) => {
@@ -35,7 +38,7 @@ export default function PackageBook({bookPackage}) {
       >
         Book
       </Button>
-      <Menu
+      {/* <Menu
         id="lock-menu"
         anchorEl={anchorEl}
         open={open}
@@ -54,7 +57,7 @@ export default function PackageBook({bookPackage}) {
             {option}
           </MenuItem>
         ))}
-      </Menu>
+      </Menu> */}
     </div>
   );
 }
