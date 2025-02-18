@@ -155,13 +155,13 @@ export default function AddressForm() {
         const url = await uploadFile(newUId, coverPhoto, 'asset/cover_photo');
         data['cover_photo'] = url;
       }
+      delete data['package_booked']
       if (uId === newUId && oldData) {
         data['status'] = 'Package Updated';
         await UserPackageAPI.update(newUId, data);
         const existingEvents = oldData.events;
         ev = _.difference(ev, existingEvents);
       } else {
-        delete data['package_booked']
         data['status'] = 'Package Created';
         await UserPackageAPI.create(data);
       }
