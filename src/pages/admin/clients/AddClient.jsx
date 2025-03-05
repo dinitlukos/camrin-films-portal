@@ -149,13 +149,11 @@ export default function AddressForm() {
       data['events'] = ev;
       data['wedding_date'] = eventDate.toDate();
       delete data['_id'];
-      // const docId = doc(db, 'stories', newUId);
-      // const docSnap = await getDoc(docId);
+      delete data['package_booked']
       if (coverPhoto) {
         const url = await uploadFile(newUId, coverPhoto, 'asset/cover_photo');
         data['cover_photo'] = url;
       }
-      delete data['package_booked']
       if (uId === newUId && oldData) {
         data['status'] = 'Package Updated';
         await UserPackageAPI.update(newUId, data);

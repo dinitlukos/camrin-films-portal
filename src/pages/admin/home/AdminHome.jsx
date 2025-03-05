@@ -41,7 +41,7 @@ export default function AdminHome() {
   const fetchStories = async () => {
     setLoading(true);
     const filter = {
-      package_booked: { $eq: null },
+      package_booked: { $in: [null,""] },
       reject: { $exists: false },
     };
     const d = await UserPackageAPI.filter(filter);

@@ -1,33 +1,13 @@
-import { Button } from "@mui/material";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import * as React from "react";
-import { package_variants } from "constants/packages";
-import { useNavigate } from "react-router-dom";
+import { Button } from '@mui/material';
+import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const options = package_variants;
-
-export default function PackageBook({data, bookPackage}) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-  const open = Boolean(anchorEl);
-  const navigate = useNavigate()
+export default function PackageBook({ data }) {
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
-      navigate('/admin/book', { state: { id: data.id } });
-    // setAnchorEl(event.currentTarget);
+    navigate('/admin/book', { state: { id: data.id } });
   };
-
-  const handleMenuItemClick = (event, index) => {
-    bookPackage(options[index])
-    setSelectedIndex(index);
-    setAnchorEl(null);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <div>
       <Button
@@ -38,26 +18,6 @@ export default function PackageBook({data, bookPackage}) {
       >
         Book
       </Button>
-      {/* <Menu
-        id="lock-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "lock-button",
-          role: "listbox",
-        }}
-      >
-        {options.map((option, index) => (
-          <MenuItem
-            key={option}
-            selected={index === selectedIndex}
-            onClick={(event) => handleMenuItemClick(event, index)}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </Menu> */}
     </div>
   );
 }

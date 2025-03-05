@@ -8,7 +8,7 @@ import {
   GridToolbarContainer,
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
-  GridToolbarQuickFilter
+  GridToolbarQuickFilter,
 } from '@mui/x-data-grid';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
@@ -80,12 +80,7 @@ const ClientTable = ({
             alignItems="center"
             sx={{ height: '100%' }}
           >
-            <Grid
-              container
-              direction="row"
-              spacing={2}
-              alignItems="center"
-            >
+            <Grid container direction="row" spacing={2} alignItems="center">
               <Typography variant="body2" component="span">
                 {params.value}
               </Typography>
@@ -137,7 +132,7 @@ const ClientTable = ({
     {
       field: 'whatsapp',
       headerName: 'Whatsapp',
-      headerClassName:'table-whatsapp-header',
+      headerClassName: 'table-whatsapp-header',
       headerAlign: 'center',
       width: 180,
       renderCell: (params) => {
@@ -154,7 +149,13 @@ const ClientTable = ({
                 variant="outlined"
                 disabled={params.row?.disable_whatsapp}
                 color="success"
-                startIcon={<Share color={params.row?.disable_whatsapp ? "disabled": "success"} />}
+                startIcon={
+                  <Share
+                    color={
+                      params.row?.disable_whatsapp ? 'disabled' : 'success'
+                    }
+                  />
+                }
                 onClick={() => handleShare(params.row)}
               >
                 Share
@@ -193,12 +194,7 @@ const ClientTable = ({
                   Cancel
                 </Button>
               ) : (
-                <PackageBook
-                data= {params.row}
-                  bookPackage={(p) =>
-                    handleDataUpdate(params.row, { package_booked: p })
-                  }
-                />
+                <PackageBook data={params.row} />
               )}
             </Grid>
           </Grid>
@@ -218,7 +214,6 @@ const ClientTable = ({
             >
               <Preview color="secondary" />
             </IconButton>
-
             <IconButton
               aria-label="edit"
               onClick={() => handleEdit(params.row)}
@@ -239,10 +234,10 @@ const ClientTable = ({
   ];
 
   const copyWhatsappMessage = (row) => {
-    const url = "https://portal.camrinfilms.com/packages/" + row?.id
-    const message = decodeURIComponent(whatsAppMessage) + url
-    navigator.clipboard.writeText(message)
-  }
+    const url = 'https://portal.camrinfilms.com/packages/' + row?.id;
+    const message = decodeURIComponent(whatsAppMessage) + url;
+    navigator.clipboard.writeText(message);
+  };
 
   const handleNavigation = (row) => {
     if (row?.id) {
@@ -255,7 +250,10 @@ const ClientTable = ({
     try {
       if (row?.customer_contact) {
         const res = await sendWhatsappMessage(row?.customer_contact, row?.id);
-        handleDataUpdate(row, { status: 'Package Sent', disable_whatsapp: true });
+        handleDataUpdate(row, {
+          status: 'Package Sent',
+          disable_whatsapp: true,
+        });
         toast.success('Message sent successfully');
       } else {
         toast.error('Invalid phone number to send message');
@@ -272,11 +270,11 @@ const ClientTable = ({
         '& .table-header': {
           backgroundColor: theme.palette.warning.main,
           color: '#fff',
-          justifyContent:'center'
+          justifyContent: 'center',
         },
         '& .table-whatsapp-header': {
           backgroundColor: theme.palette.success.main,
-          color: '#fff'
+          color: '#fff',
         },
       }}
     >
@@ -288,8 +286,8 @@ const ClientTable = ({
         getRowHeight={() => 'auto'}
         initialState={{
           sorting: {
-            sortModel:[{field:'packages', sort:'desc'}]
-          }
+            sortModel: [{ field: 'packages', sort: 'desc' }],
+          },
         }}
         slotProps={{
           toolbar: {
